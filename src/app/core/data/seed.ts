@@ -201,7 +201,7 @@ function retailPrice(raw: number): number {
 }
 
 function stripAccents(value: string): string {
-  return value.normalize('NFD').replace(/[̀-ͯ]/g, '');
+  return value.normalize('NFD').replace(/\p{Diacritic}/gu, '');
 }
 
 function slug(value: string): string {
