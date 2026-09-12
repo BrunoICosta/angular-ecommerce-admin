@@ -2,6 +2,14 @@ import { Injectable } from '@angular/core';
 import { InMemoryDbService, RequestInfo, ResponseOptions, STATUS } from 'angular-in-memory-web-api';
 import { Observable } from 'rxjs';
 
+import {
+  DEMO_PASSWORD,
+  LoginRequest,
+  LoginResponse,
+  SessionUser,
+  TOKEN_TTL_SECONDS,
+} from '../auth/auth.model';
+import { createMockToken } from '../auth/jwt.util';
 import { SeedData, generateSeedData } from './seed/seed-data';
 import {
   CustomerWithStats,
@@ -85,8 +93,40 @@ export class FakeApiService implements InMemoryDbService {
   }
 
   post(reqInfo: RequestInfo): Observable<unknown> | undefined {
-    if (reqInfo.collectionName !== 'products') return undefined;
+    if (reqInfo.collectionName === 'auth' && reqInfo.id === 'login') return this.login(reqInfo);
+    if (reqInfo.collectionName === 'products') return this.createProduct(reqInfo);
+    return undefined;
+  }
 
+  private login(reqInfo: RequestInfo): Observable<unknown> {
+    const { email, password } = reqInfo.utils.getJsonBody(reqInfo.req) as LoginRequest;
+    const user = this.db(reqInfo).users.find(
+      (u) => u.email.toLowerCase() === email?.trim().toLowerCase(),
+    );
+    if (!user || password !== DEMO_PASSWORD) {
+      return this.error(reqInfo, STATUS.UNAUTHORIZED, 'E-mail ou senha inválidos.');
+    }
+    if (!user.active) {
+      return this.error(reqInfo, STATUS.FORBIDDEN, 'Este usuário está desativado.');
+    }
+    user.lastLoginAt = new Date().toISOString();
+    const session: SessionUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+    const body: LoginResponse = {
+      token: createMockToken(
+        { sub: user.id, name: user.name, email: user.email, role: user.role },
+        TOKEN_TTL_SECONDS,
+      ),
+      user: session,
+    };
+    return this.ok(reqInfo, body);
+  }
+
+  private createProduct(reqInfo: RequestInfo): Observable<unknown> {
     const db = this.db(reqInfo);
     const draft = reqInfo.utils.getJsonBody(reqInfo.req) as ProductDraft;
     if (db.products.some((p) => p.sku.toLowerCase() === draft.sku.toLowerCase())) {

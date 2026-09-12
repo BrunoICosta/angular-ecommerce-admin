@@ -1,0 +1,172 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+.login {
+  display: grid;
+  min-height: 100dvh;
+
+  @media (min-width: 960px) {
+    grid-template-columns: minmax(360px, 5fr) 7fr;
+  }
+}
+
+.login__brand {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 20% 15%, rgb(255 255 255 / 18%), transparent 45%),
+    linear-gradient(150deg, #4f378b 0%, #6750a4 45%, #b4580b 130%);
+
+  @media (min-width: 960px) {
+    display: flex;
+  }
+
+  h2 {
+    margin: 0 0 24px;
+    font:
+      600 2rem/1.25 Inter,
+      sans-serif;
+    max-width: 18ch;
+  }
+
+  ul {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+  }
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.brand-footer {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.login__panel {
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.login__card {
+  width: min(420px, 100%);
+
+  header {
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    margin: 0 0 4px;
+    font: var(--mat-sys-headline-medium);
+  }
+
+  header p {
+    margin: 0;
+    color: var(--app-muted);
+  }
+}
+
+form {
+  display: grid;
+  gap: 4px;
+}
+
+.submit {
+  height: 48px;
+  margin-top: 8px;
+
+  mat-spinner {
+    margin: 0 auto;
+  }
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+
+  &--info {
+    color: var(--app-info);
+    background: var(--app-info-bg);
+  }
+
+  &--error {
+    color: var(--app-danger);
+    background: var(--app-danger-bg);
+  }
+}
+
+.demo {
+  margin-top: 28px;
+  padding: 16px;
+  border: 1px dashed var(--app-card-border);
+  border-radius: var(--app-radius);
+  background: var(--mat-sys-surface-container-low);
+
+  h2 {
+    margin: 0 0 4px;
+    font: var(--mat-sys-title-small);
+  }
+
+  p {
+    margin: 0 0 12px;
+    color: var(--app-muted);
+  }
+
+  code {
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: var(--mat-sys-surface-container-high);
+    color: var(--mat-sys-on-surface);
+    font-weight: 600;
+  }
+
+  ul {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    div {
+      display: grid;
+      min-width: 0;
+    }
+
+    span {
+      color: var(--app-muted);
+      font-size: 0.8125rem;
+    }
+  }
+}
