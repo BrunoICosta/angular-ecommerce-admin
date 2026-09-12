@@ -1,4 +1,4 @@
-import { Page, SortDirection } from '../core/models';
+import { Page, SortDirection } from '../models';
 
 export interface ListQuery {
   page: number;
@@ -28,7 +28,10 @@ function first(params: Map<string, string[]>, key: string): string {
 }
 
 export function normalize(value: string): string {
-  return value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+  return value
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase();
 }
 
 export function parseListQuery(params: Map<string, string[]>): ListQuery {

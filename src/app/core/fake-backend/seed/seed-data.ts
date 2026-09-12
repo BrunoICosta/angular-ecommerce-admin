@@ -8,8 +8,8 @@ import {
   Product,
   ProductCategory,
   User,
-} from '../models';
-import { SeededRandom } from './random';
+} from '../../models';
+import { SeededRandom } from './seeded-random';
 
 export interface SeedData {
   products: Product[];

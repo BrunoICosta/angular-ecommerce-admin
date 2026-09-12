@@ -8,7 +8,7 @@ import { RouterOutlet } from '@angular/router';
   template: '<router-outlet />',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App {
+export class AppComponent {
   constructor() {
     inject(MatIconRegistry).setDefaultFontSetClass('material-symbols-outlined');
   }

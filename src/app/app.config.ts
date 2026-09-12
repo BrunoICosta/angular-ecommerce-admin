@@ -11,7 +11,7 @@ import {
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideFakeBackend } from './backend/provide-fake-backend';
+import { provideFakeBackend } from './core/fake-backend/fake-backend.provider';
 
 registerLocaleData(localePt, 'pt-BR');
 

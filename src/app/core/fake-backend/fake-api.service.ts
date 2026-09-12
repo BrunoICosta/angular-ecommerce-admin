@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { InMemoryDbService, RequestInfo, ResponseOptions, STATUS } from 'angular-in-memory-web-api';
 import { Observable } from 'rxjs';
 
-import { SeedData, generateSeedData } from '../core/data/seed';
+import { SeedData, generateSeedData } from './seed/seed-data';
 import {
   CustomerWithStats,
   Order,
@@ -12,7 +12,7 @@ import {
   StockStatus,
   canTransition,
   stockStatus,
-} from '../core/models';
+} from '../models';
 import { ListOptions, applyListQuery, parseListQuery } from './list-query';
 
 const productListOptions: ListOptions<Product> = {
