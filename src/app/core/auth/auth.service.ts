@@ -3,6 +3,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
 
+import { silentErrors } from '../http/http-context.tokens';
 import { Role } from '../models';
 import { LoginRequest, LoginResponse, SessionUser } from './auth.model';
 import { decodeToken, isExpired } from './jwt.util';
@@ -62,9 +63,14 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<SessionUser> {
-    return this.http.post<LoginResponse>('api/auth/login', credentials).pipe(
-      tap(({ token }) => this.setToken(token)),
-      map(({ user }) => user),
+    return (
+      this.http
+        // The login page shows the error inline, so no global snackbar here.
+        .post<LoginResponse>('api/auth/login', credentials, { context: silentErrors() })
+        .pipe(
+          tap(({ token }) => this.setToken(token)),
+          map(({ user }) => user),
+        )
     );
   }
 

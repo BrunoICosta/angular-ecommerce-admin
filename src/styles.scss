@@ -77,3 +77,24 @@ a {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+// Snackbar tones used by NotificationService.
+.app-snackbar--error {
+  @include mat.snack-bar-overrides(
+    (
+      container-color: var(--app-danger-bg),
+      supporting-text-color: var(--app-danger),
+      button-color: var(--app-danger),
+    )
+  );
+}
+
+.app-snackbar--success {
+  @include mat.snack-bar-overrides(
+    (
+      container-color: var(--app-success-bg),
+      supporting-text-color: var(--app-success),
+      button-color: var(--app-success),
+    )
+  );
+}

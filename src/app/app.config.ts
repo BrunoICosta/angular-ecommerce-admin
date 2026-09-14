@@ -1,5 +1,5 @@
 import { registerLocaleData } from '@angular/common';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import localePt from '@angular/common/locales/pt';
 import {
   ApplicationConfig,
@@ -11,6 +11,9 @@ import {
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
+import { authInterceptor } from './core/auth/auth.interceptor';
+import { errorInterceptor } from './core/http/error.interceptor';
+import { loadingInterceptor } from './core/http/loading.interceptor';
 import { provideFakeBackend } from './core/fake-backend/fake-backend.provider';
 
 registerLocaleData(localePt, 'pt-BR');
@@ -20,7 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([loadingInterceptor, authInterceptor, errorInterceptor])),
     // Must come after provideHttpClient(): it replaces the HttpBackend.
     provideFakeBackend(),
     { provide: LOCALE_ID, useValue: 'pt-BR' },

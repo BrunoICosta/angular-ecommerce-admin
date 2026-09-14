@@ -5,12 +5,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 
-import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '../../../../core/auth/auth.model';
-import { AuthService } from '../../../../core/auth/auth.service';
+import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '@core/auth/auth.model';
+import { AuthService } from '@core/auth/auth.service';
+import { httpErrorMessage } from '@core/http/http-error.util';
 
 @Component({
   selector: 'app-login-page',
@@ -63,7 +63,7 @@ export class LoginPageComponent {
       .pipe(finalize(() => this.submitting.set(false)))
       .subscribe({
         next: () => void this.router.navigateByUrl(this.safeReturnUrl()),
-        error: (error: unknown) => this.errorMessage.set(loginErrorMessage(error)),
+        error: (error: unknown) => this.errorMessage.set(httpErrorMessage(error)),
       });
   }
 
@@ -72,13 +72,4 @@ export class LoginPageComponent {
     const url = this.returnUrl();
     return url && url.startsWith('/') && !url.startsWith('//') ? url : '/dashboard';
   }
-}
-
-function loginErrorMessage(error: unknown): string {
-  if (error instanceof HttpErrorResponse) {
-    const body: unknown = error.error;
-    if (typeof body === 'object' && body !== null && 'error' in body) return String(body.error);
-    if (error.status === 0) return 'Não foi possível conectar. Verifique sua conexão.';
-  }
-  return 'Não foi possível entrar. Tente novamente.';
 }

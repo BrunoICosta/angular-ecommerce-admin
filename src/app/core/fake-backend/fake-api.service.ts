@@ -1,3 +1,4 @@
+import { HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { InMemoryDbService, RequestInfo, ResponseOptions, STATUS } from 'angular-in-memory-web-api';
 import { Observable } from 'rxjs';
@@ -9,7 +10,7 @@ import {
   SessionUser,
   TOKEN_TTL_SECONDS,
 } from '../auth/auth.model';
-import { createMockToken } from '../auth/jwt.util';
+import { createMockToken, decodeToken, isExpired } from '../auth/jwt.util';
 import { SeedData, generateSeedData } from './seed/seed-data';
 import {
   CustomerWithStats,
@@ -64,7 +65,47 @@ export class FakeApiService implements InMemoryDbService {
     return generateSeedData(new Date());
   }
 
+  // HTTP method hooks called by angular-in-memory-web-api. Returning
+  // `undefined` lets the library handle the request with its default CRUD logic.
+
   get(reqInfo: RequestInfo): Observable<unknown> | undefined {
+    return this.authorize(reqInfo) ?? this.handleGet(reqInfo);
+  }
+
+  post(reqInfo: RequestInfo): Observable<unknown> | undefined {
+    if (reqInfo.collectionName === 'auth' && reqInfo.id === 'login') return this.login(reqInfo);
+    return this.authorize(reqInfo) ?? this.handlePost(reqInfo);
+  }
+
+  put(reqInfo: RequestInfo): Observable<unknown> | undefined {
+    return this.authorize(reqInfo) ?? this.handlePut(reqInfo);
+  }
+
+  delete(reqInfo: RequestInfo): Observable<unknown> | undefined {
+    return this.authorize(reqInfo) ?? undefined;
+  }
+
+  /**
+   * Mimics what an API gateway would do: every endpoint needs a valid bearer
+   * token, deletions and user management are restricted to admins.
+   */
+  private authorize(reqInfo: RequestInfo): Observable<unknown> | null {
+    const header = (reqInfo.req as HttpRequest<unknown>).headers.get('Authorization') ?? '';
+    const claims = header.startsWith('Bearer ') ? decodeToken(header.slice(7)) : null;
+    if (!claims) {
+      return this.error(reqInfo, STATUS.UNAUTHORIZED, 'Autenticação necessária.');
+    }
+    if (isExpired(claims)) {
+      return this.error(reqInfo, STATUS.UNAUTHORIZED, 'Sua sessão expirou.');
+    }
+    const adminOnly = reqInfo.method === 'delete' || reqInfo.collectionName === 'users';
+    if (adminOnly && claims.role !== 'admin') {
+      return this.error(reqInfo, STATUS.FORBIDDEN, 'Você não tem permissão para esta ação.');
+    }
+    return null;
+  }
+
+  private handleGet(reqInfo: RequestInfo): Observable<unknown> | undefined {
     const db = this.db(reqInfo);
     const query = parseListQuery(reqInfo.query);
 
@@ -92,10 +133,8 @@ export class FakeApiService implements InMemoryDbService {
     }
   }
 
-  post(reqInfo: RequestInfo): Observable<unknown> | undefined {
-    if (reqInfo.collectionName === 'auth' && reqInfo.id === 'login') return this.login(reqInfo);
-    if (reqInfo.collectionName === 'products') return this.createProduct(reqInfo);
-    return undefined;
+  private handlePost(reqInfo: RequestInfo): Observable<unknown> | undefined {
+    return reqInfo.collectionName === 'products' ? this.createProduct(reqInfo) : undefined;
   }
 
   private login(reqInfo: RequestInfo): Observable<unknown> {
@@ -141,7 +180,7 @@ export class FakeApiService implements InMemoryDbService {
     return this.ok(reqInfo, product, STATUS.CREATED);
   }
 
-  put(reqInfo: RequestInfo): Observable<unknown> | undefined {
+  private handlePut(reqInfo: RequestInfo): Observable<unknown> | undefined {
     if (reqInfo.collectionName !== 'orders') return undefined;
 
     // Orders only accept status changes, validated against the workflow.
