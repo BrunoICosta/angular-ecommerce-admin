@@ -18,6 +18,12 @@ html {
     )
   );
 
+  @include mat.sidenav-overrides(
+    (
+      container-shape: 0,
+    )
+  );
+
   // App-level tokens layered on top of the Material system tokens.
   --app-bg: light-dark(#f6f5fa, #121117);
   --app-card-border: light-dark(#e7e4ef, #2b2935);

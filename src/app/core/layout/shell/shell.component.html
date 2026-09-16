@@ -1,0 +1,87 @@
+<a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+
+@if (loading.isLoading()) {
+  <mat-progress-bar class="loading-bar" mode="indeterminate" aria-label="Carregando dados" />
+}
+
+<mat-sidenav-container class="shell" autosize>
+  <mat-sidenav
+    class="sidenav"
+    [class.sidenav--rail]="railMode()"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="isHandset() ? drawerOpen() : true"
+    (closedStart)="drawerOpen.set(false)"
+  >
+    <div class="brand">
+      <span class="brand__logo" aria-hidden="true"><mat-icon>storefront</mat-icon></span>
+      @if (!railMode()) {
+        <span class="brand__name">Loja Admin</span>
+      }
+    </div>
+
+    <nav class="nav" aria-label="Navegação principal">
+      @for (item of navItems(); track item.path) {
+        <a
+          class="nav__link"
+          [routerLink]="item.path"
+          routerLinkActive="nav__link--active"
+          ariaCurrentWhenActive="page"
+          [matTooltip]="railMode() ? item.label : ''"
+          matTooltipPosition="right"
+          [attr.aria-label]="railMode() ? item.label : null"
+        >
+          <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+          @if (!railMode()) {
+            <span>{{ item.label }}</span>
+          }
+        </a>
+      }
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main">
+    <mat-toolbar class="toolbar">
+      <button
+        mat-icon-button
+        type="button"
+        (click)="toggleMenu()"
+        [attr.aria-label]="
+          isHandset() ? 'Abrir menu' : railMode() ? 'Expandir menu' : 'Recolher menu'
+        "
+        [attr.aria-expanded]="isHandset() ? drawerOpen() : !railMode()"
+      >
+        <mat-icon>{{ isHandset() || railMode() ? 'menu' : 'menu_open' }}</mat-icon>
+      </button>
+
+      <span class="toolbar__spacer"></span>
+
+      <button
+        mat-button
+        type="button"
+        class="user-button"
+        [matMenuTriggerFor]="userMenu"
+        aria-label="Menu do usuário"
+      >
+        <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+        <span class="user-button__name">{{ user()?.name }}</span>
+        <mat-icon iconPositionEnd>expand_more</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu" xPosition="before">
+        <div class="user-card">
+          <strong>{{ user()?.name }}</strong>
+          <span>{{ user()?.email }}</span>
+          <span class="role-badge">{{ roleLabel() }}</span>
+        </div>
+        <mat-divider />
+        <button mat-menu-item type="button" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Sair</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <main id="main-content" class="content" tabindex="-1">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

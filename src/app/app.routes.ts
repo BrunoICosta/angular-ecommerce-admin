@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { authGuard, guestGuard } from './core/auth/auth.guard';
+import { ShellComponent } from './core/layout/shell/shell.component';
 
 export const routes: Routes = [
   {
@@ -10,7 +11,9 @@ export const routes: Routes = [
   },
   {
     path: '',
+    component: ShellComponent,
     canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
@@ -18,7 +21,16 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
       },
+      {
+        path: 'forbidden',
+        loadChildren: () =>
+          import('./features/errors/errors.routes').then((m) => m.FORBIDDEN_ROUTES),
+      },
+      {
+        path: '**',
+        loadChildren: () =>
+          import('./features/errors/errors.routes').then((m) => m.NOT_FOUND_ROUTES),
+      },
     ],
   },
-  { path: '**', redirectTo: '' },
 ];
