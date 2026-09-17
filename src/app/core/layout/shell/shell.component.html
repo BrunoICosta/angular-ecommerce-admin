@@ -53,7 +53,17 @@
         <mat-icon>{{ isHandset() || railMode() ? 'menu' : 'menu_open' }}</mat-icon>
       </button>
 
-      <span class="toolbar__spacer"></span>
+      <app-breadcrumb class="toolbar__breadcrumb" />
+
+      <button
+        mat-icon-button
+        type="button"
+        (click)="theme.toggle()"
+        [attr.aria-label]="theme.isDark() ? 'Ativar tema claro' : 'Ativar tema escuro'"
+        [matTooltip]="theme.isDark() ? 'Tema claro' : 'Tema escuro'"
+      >
+        <mat-icon>{{ theme.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
 
       <button
         mat-button

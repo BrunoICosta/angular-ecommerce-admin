@@ -18,11 +18,13 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
         path: 'dashboard',
+        data: { breadcrumb: 'Dashboard' },
         loadChildren: () =>
           import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
       },
       {
         path: 'forbidden',
+        data: { breadcrumb: 'Acesso negado' },
         loadChildren: () =>
           import('./features/errors/errors.routes').then((m) => m.FORBIDDEN_ROUTES),
       },

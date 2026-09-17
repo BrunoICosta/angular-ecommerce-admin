@@ -15,6 +15,8 @@ import { filter, map } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 import { LoadingService } from '../../http/loading.service';
 import { ROLE_LABELS } from '../../models';
+import { ThemeService } from '../../theme/theme.service';
+import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 import { NAV_ITEMS } from '../nav-items';
 
 const COLLAPSED_KEY = 'loja-admin.sidenav-collapsed';
@@ -30,6 +32,7 @@ function readCollapsed(): boolean {
 @Component({
   selector: 'app-shell',
   imports: [
+    BreadcrumbComponent,
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
@@ -49,6 +52,7 @@ function readCollapsed(): boolean {
 export class ShellComponent {
   private readonly auth = inject(AuthService);
   protected readonly loading = inject(LoadingService);
+  protected readonly theme = inject(ThemeService);
 
   protected readonly isHandset = toSignal(
     inject(BreakpointObserver)
