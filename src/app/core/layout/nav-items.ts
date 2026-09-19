@@ -10,4 +10,5 @@ export interface NavItem {
 
 export const NAV_ITEMS: readonly NavItem[] = [
   { label: 'Dashboard', icon: 'space_dashboard', path: '/dashboard' },
+  { label: 'Produtos', icon: 'inventory_2', path: '/products' },
 ];

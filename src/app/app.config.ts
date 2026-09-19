@@ -11,6 +11,7 @@ import {
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
+import { providePtBrPaginatorIntl } from './shared/i18n/paginator-intl';
 import { authInterceptor } from './core/auth/auth.interceptor';
 import { errorInterceptor } from './core/http/error.interceptor';
 import { loadingInterceptor } from './core/http/loading.interceptor';
@@ -28,5 +29,6 @@ export const appConfig: ApplicationConfig = {
     provideFakeBackend(),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
+    providePtBrPaginatorIntl(),
   ],
 };

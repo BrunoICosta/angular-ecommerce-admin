@@ -1,0 +1,27 @@
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 240px;
+
+  img {
+    flex: none;
+    border-radius: 10px;
+    object-fit: cover;
+    background: var(--mat-sys-surface-container-high);
+  }
+
+  div {
+    display: grid;
+  }
+
+  &__name {
+    font-weight: 600;
+  }
+
+  &__sku {
+    color: var(--app-muted);
+    font-size: 0.8125rem;
+    font-family: ui-monospace, 'Cascadia Mono', monospace;
+  }
+}

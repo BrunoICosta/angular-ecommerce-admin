@@ -23,6 +23,12 @@ export const routes: Routes = [
           import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
       },
       {
+        path: 'products',
+        data: { breadcrumb: 'Produtos' },
+        loadChildren: () =>
+          import('./features/products/products.routes').then((m) => m.PRODUCTS_ROUTES),
+      },
+      {
         path: 'forbidden',
         data: { breadcrumb: 'Acesso negado' },
         loadChildren: () =>
