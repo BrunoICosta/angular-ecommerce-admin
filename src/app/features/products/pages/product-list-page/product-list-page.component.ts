@@ -11,7 +11,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router, RouterLink } from '@angular/router';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { PRODUCT_CATEGORIES, STOCK_STATUS_LABELS, StockStatus } from '@core/models';
@@ -48,6 +49,8 @@ const DEFAULTS = { page: 1, size: PAGE_SIZE_OPTIONS[0], sort: 'name', dir: 'asc'
     MatSelectModule,
     MatSortModule,
     MatTableModule,
+    MatTooltipModule,
+    RouterLink,
   ],
   templateUrl: './product-list-page.component.html',
   styleUrl: './product-list-page.component.scss',

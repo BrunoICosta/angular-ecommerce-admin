@@ -1,6 +1,14 @@
 import { Routes } from '@angular/router';
 
+import { Product } from '@core/models';
+
+import { productResolver } from './data-access/product.resolver';
 import { ProductsService } from './data-access/products.service';
+
+const loadFormPage = () =>
+  import('./pages/product-form-page/product-form-page.component').then(
+    (m) => m.ProductFormPageComponent,
+  );
 
 export const PRODUCTS_ROUTES: Routes = [
   {
@@ -14,6 +22,19 @@ export const PRODUCTS_ROUTES: Routes = [
           import('./pages/product-list-page/product-list-page.component').then(
             (m) => m.ProductListPageComponent,
           ),
+      },
+      {
+        path: 'new',
+        title: 'Novo produto · Loja Admin',
+        data: { breadcrumb: 'Novo produto' },
+        loadComponent: loadFormPage,
+      },
+      {
+        path: ':id/edit',
+        title: 'Editar produto · Loja Admin',
+        resolve: { product: productResolver },
+        data: { breadcrumb: (data: { product?: Product }) => data.product?.name ?? 'Editar' },
+        loadComponent: loadFormPage,
       },
     ],
   },
