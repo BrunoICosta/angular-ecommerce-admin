@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+import { pendingChangesGuard } from '@core/guards/pending-changes.guard';
 import { Product } from '@core/models';
 
 import { productResolver } from './data-access/product.resolver';
@@ -27,12 +28,14 @@ export const PRODUCTS_ROUTES: Routes = [
         path: 'new',
         title: 'Novo produto · Loja Admin',
         data: { breadcrumb: 'Novo produto' },
+        canDeactivate: [pendingChangesGuard],
         loadComponent: loadFormPage,
       },
       {
         path: ':id/edit',
         title: 'Editar produto · Loja Admin',
         resolve: { product: productResolver },
+        canDeactivate: [pendingChangesGuard],
         data: { breadcrumb: (data: { product?: Product }) => data.product?.name ?? 'Editar' },
         loadComponent: loadFormPage,
       },

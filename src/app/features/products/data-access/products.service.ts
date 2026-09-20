@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin, map } from 'rxjs';
 
 import { Page, Product, ProductDraft } from '@core/models';
 import { toHttpParams } from '@shared/utils/http-params.util';
@@ -27,5 +27,14 @@ export class ProductsService {
 
   update(product: Product): Observable<Product> {
     return this.http.put<Product>(`${this.baseUrl}/${product.id}`, product);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  /** The API has no bulk endpoint, so deletions run in parallel. */
+  deleteMany(ids: readonly number[]): Observable<void> {
+    return forkJoin(ids.map((id) => this.delete(id))).pipe(map(() => undefined));
   }
 }

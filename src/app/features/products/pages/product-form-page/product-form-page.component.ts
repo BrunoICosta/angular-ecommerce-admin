@@ -20,6 +20,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Observable, finalize, startWith } from 'rxjs';
 
 import { PRODUCT_CATEGORIES, Product, ProductCategory, ProductDraft } from '@core/models';
+import { HasPendingChanges } from '@core/guards/pending-changes.guard';
 import { NotificationService } from '@core/notifications/notification.service';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 
@@ -48,7 +49,7 @@ const URL_PATTERN = /^https?:\/\/\S+$/i;
   styleUrl: './product-form-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductFormPageComponent implements OnInit {
+export class ProductFormPageComponent implements OnInit, HasPendingChanges {
   private readonly productsApi = inject(ProductsService);
   private readonly notifications = inject(NotificationService);
   private readonly router = inject(Router);
@@ -82,6 +83,10 @@ export class ProductFormPageComponent implements OnInit {
     // patchValue ignores the keys the form does not have (id, createdAt).
     const product = this.product();
     if (product) this.form.patchValue(product);
+  }
+
+  hasPendingChanges(): boolean {
+    return this.form.dirty && !this.saving();
   }
 
   protected skuToUpperCase(): void {

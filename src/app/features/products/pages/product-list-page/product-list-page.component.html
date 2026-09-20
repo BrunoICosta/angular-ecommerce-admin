@@ -39,6 +39,22 @@
     }
   </div>
 
+  @if (selected().size > 0) {
+    <div class="bulk-bar" role="region" aria-label="Ações em lote">
+      <span>{{ selected().size }} selecionado(s)</span>
+      <button mat-button type="button" (click)="clearSelection()">Limpar seleção</button>
+      <button
+        mat-flat-button
+        type="button"
+        class="danger"
+        (click)="deleteSelected()"
+        [disabled]="deleting()"
+      >
+        <mat-icon>delete</mat-icon> Excluir selecionados
+      </button>
+    </div>
+  }
+
   <div class="table-wrapper" [attr.aria-busy]="products.isLoading()">
     @if (products.isLoading()) {
       <mat-progress-bar
@@ -66,6 +82,24 @@
         matSortDisableClear
         (matSortChange)="onSort($event)"
       >
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef class="cell-select">
+            <mat-checkbox
+              [checked]="allSelected()"
+              [indeterminate]="someSelected()"
+              (change)="toggleAll()"
+              aria-label="Selecionar todos os produtos da página"
+            />
+          </th>
+          <td mat-cell *matCellDef="let product" class="cell-select">
+            <mat-checkbox
+              [checked]="selected().has(product.id)"
+              (change)="toggle(product.id)"
+              [attr.aria-label]="'Selecionar ' + product.name"
+            />
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="product">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Produto</th>
           <td mat-cell *matCellDef="let product">
@@ -98,6 +132,16 @@
           <td mat-cell *matCellDef="let product" class="num">{{ product.stock }}</td>
         </ng-container>
 
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Situação</th>
+          <td mat-cell *matCellDef="let product">
+            <app-stock-status-chip [product]="product" />
+            @if (!product.active) {
+              <span class="inactive">Inativo</span>
+            }
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef><span class="visually-hidden">Ações</span></th>
           <td mat-cell *matCellDef="let product" class="cell-actions">
@@ -109,11 +153,27 @@
             >
               <mat-icon>edit</mat-icon>
             </a>
+            @if (isAdmin()) {
+              <button
+                mat-icon-button
+                type="button"
+                (click)="deleteProduct(product)"
+                [attr.aria-label]="'Excluir ' + product.name"
+                matTooltip="Excluir"
+                [disabled]="deleting()"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+        <tr mat-header-row *matHeaderRowDef="columns(); sticky: true"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: columns()"
+          [class.row-selected]="selected().has(row.id)"
+        ></tr>
       </table>
 
       @if (page.total === 0) {
