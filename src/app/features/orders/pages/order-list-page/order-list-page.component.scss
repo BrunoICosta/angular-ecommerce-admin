@@ -1,0 +1,21 @@
+.status-filter {
+  flex: 1 1 100%;
+}
+
+.order-number {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.customer-cell {
+  display: grid;
+  min-width: 160px;
+
+  small {
+    color: var(--app-muted);
+  }
+}
+
+.nowrap {
+  white-space: nowrap;
+}

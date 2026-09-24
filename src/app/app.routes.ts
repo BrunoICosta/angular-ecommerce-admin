@@ -29,6 +29,11 @@ export const routes: Routes = [
           import('./features/products/products.routes').then((m) => m.PRODUCTS_ROUTES),
       },
       {
+        path: 'orders',
+        data: { breadcrumb: 'Pedidos' },
+        loadChildren: () => import('./features/orders/orders.routes').then((m) => m.ORDERS_ROUTES),
+      },
+      {
         path: 'forbidden',
         data: { breadcrumb: 'Acesso negado' },
         loadChildren: () =>
