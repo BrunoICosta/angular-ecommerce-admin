@@ -1,0 +1,23 @@
+<ol class="timeline">
+  @for (step of steps(); track step.status) {
+    <li
+      class="step"
+      [class]="'step--' + step.state"
+      [attr.aria-current]="step.state === 'current' ? 'step' : null"
+    >
+      <span class="step__marker" aria-hidden="true">
+        <mat-icon>{{
+          step.state === 'upcoming' ? 'radio_button_unchecked' : appearance[step.status].icon
+        }}</mat-icon>
+      </span>
+      <div class="step__body">
+        <span class="step__label">{{ labels[step.status] }}</span>
+        @if (step.at) {
+          <time [attr.datetime]="step.at">{{ step.at | date: "dd/MM/yyyy 'às' HH:mm" }}</time>
+        } @else {
+          <span class="step__pending">Pendente</span>
+        }
+      </div>
+    </li>
+  }
+</ol>

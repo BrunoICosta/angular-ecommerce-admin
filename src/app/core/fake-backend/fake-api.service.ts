@@ -209,7 +209,8 @@ export class FakeApiService implements InMemoryDbService {
   private ok(reqInfo: RequestInfo, body: object, status = STATUS.OK): Observable<unknown> {
     return reqInfo.utils.createResponse$((): ResponseOptions => ({
       status,
-      body,
+      // Cloned so callers never hold references to the in-memory records.
+      body: structuredClone(body),
       headers: reqInfo.headers,
       url: reqInfo.url,
     }));

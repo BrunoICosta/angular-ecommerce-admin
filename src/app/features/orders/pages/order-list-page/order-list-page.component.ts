@@ -11,7 +11,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { ORDER_STATUSES, ORDER_STATUS_LABELS, PAYMENT_METHOD_LABELS } from '@core/models';
@@ -41,6 +41,7 @@ const DEFAULTS = { page: 1, size: PAGE_SIZE_OPTIONS[0], sort: 'createdAt', dir: 
     DatePipe,
     ReactiveFormsModule,
     LabelPipe,
+    RouterLink,
     ErrorStateComponent,
     OrderStatusChipComponent,
     PageHeaderComponent,

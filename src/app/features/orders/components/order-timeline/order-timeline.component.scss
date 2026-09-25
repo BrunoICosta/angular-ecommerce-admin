@@ -1,0 +1,80 @@
+.timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  padding-bottom: 22px;
+
+  // Connector line between markers.
+  &:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: 34px;
+    bottom: 2px;
+    left: 15px;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--app-card-border);
+  }
+
+  &--done:not(:last-child)::before {
+    background: var(--app-success);
+  }
+
+  &__marker {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--mat-sys-surface-container-high);
+    color: var(--app-muted);
+
+    mat-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+    }
+  }
+
+  &--done &__marker {
+    background: var(--app-success-bg);
+    color: var(--app-success);
+  }
+
+  &--current &__marker {
+    background: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--mat-sys-primary) 20%, transparent);
+  }
+
+  &--cancelled &__marker {
+    background: var(--app-danger-bg);
+    color: var(--app-danger);
+  }
+
+  &__body {
+    display: grid;
+    padding-top: 5px;
+  }
+
+  &__label {
+    font-weight: 600;
+  }
+
+  &--upcoming &__label {
+    color: var(--app-muted);
+  }
+
+  time,
+  &__pending {
+    color: var(--app-muted);
+    font-size: 0.8125rem;
+  }
+}
