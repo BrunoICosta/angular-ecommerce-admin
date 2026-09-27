@@ -57,7 +57,9 @@
       <dl class="facts">
         <div>
           <dt>Cliente</dt>
-          <dd>{{ order.customerName }}</dd>
+          <dd>
+            <a [routerLink]="['/customers', order.customerId]">{{ order.customerName }}</a>
+          </dd>
         </div>
         <div>
           <dt>Entrega</dt>

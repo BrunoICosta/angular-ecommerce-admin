@@ -1,0 +1,22 @@
+.person {
+  display: grid;
+  min-width: 200px;
+
+  a {
+    color: var(--mat-sys-primary);
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  small {
+    color: var(--app-muted);
+  }
+}
+
+.nowrap {
+  white-space: nowrap;
+}
