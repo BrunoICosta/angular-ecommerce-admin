@@ -1,0 +1,60 @@
+<app-page-header
+  [title]="greeting()"
+  subtitle="Resumo dos últimos 30 dias, comparado aos 30 dias anteriores"
+>
+  @if (data(); as summary) {
+    <span class="updated">Atualizado às {{ summary.generatedAt | date: 'HH:mm' }}</span>
+  }
+  <button
+    mat-stroked-button
+    type="button"
+    (click)="summary.reload()"
+    [disabled]="summary.isLoading()"
+  >
+    <mat-icon>refresh</mat-icon> Atualizar
+  </button>
+</app-page-header>
+
+@if (summary.error()) {
+  <section class="card">
+    <app-error-state
+      icon="cloud_off"
+      title="Não foi possível carregar o dashboard"
+      message="Verifique sua conexão e tente novamente."
+    >
+      <button mat-flat-button type="button" (click)="summary.reload()">Tentar novamente</button>
+    </app-error-state>
+  </section>
+} @else if (data(); as summary) {
+  <section class="kpis" aria-label="Indicadores principais">
+    @for (kpi of kpis(); track kpi.label) {
+      <app-stat-tile
+        [label]="kpi.label"
+        [value]="kpi.value"
+        [icon]="kpi.icon"
+        [trend]="kpi.trend"
+        hint="vs. 30 dias anteriores"
+      />
+    }
+  </section>
+
+  <section class="card panel" aria-labelledby="revenue-title">
+    <header class="panel__header">
+      <h2 id="revenue-title">Receita nos últimos 12 meses</h2>
+      <span>Pedidos não cancelados</span>
+    </header>
+    <!-- Chart.js is only parsed and executed once the panel scrolls into view. -->
+    @defer (on viewport) {
+      <app-revenue-chart [months]="summary.revenueByMonth" />
+    } @placeholder {
+      <div class="chart-placeholder" aria-hidden="true"></div>
+    }
+  </section>
+} @else {
+  <div class="kpis" aria-hidden="true">
+    @for (i of [1, 2, 3, 4]; track i) {
+      <div class="kpi-skeleton"></div>
+    }
+  </div>
+  <div class="card chart-placeholder chart-placeholder--loading" aria-hidden="true"></div>
+}

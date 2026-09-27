@@ -22,6 +22,7 @@ import {
   canTransition,
   stockStatus,
 } from '../models';
+import { buildDashboardSummary } from './dashboard-summary';
 import { ListOptions, applyListQuery, parseListQuery } from './list-query';
 
 const productListOptions: ListOptions<Product> = {
@@ -110,6 +111,8 @@ export class FakeApiService implements InMemoryDbService {
     const query = parseListQuery(reqInfo.query);
 
     switch (reqInfo.collectionName) {
+      case 'dashboard':
+        return this.ok(reqInfo, buildDashboardSummary(db));
       case 'products':
         return reqInfo.id
           ? undefined

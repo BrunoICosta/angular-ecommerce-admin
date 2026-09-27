@@ -1,0 +1,45 @@
+:host {
+  display: block;
+}
+
+.chart {
+  position: relative;
+  height: 280px;
+}
+
+.data-table {
+  margin-top: 12px;
+
+  summary {
+    width: fit-content;
+    color: var(--mat-sys-primary);
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  table {
+    width: 100%;
+    margin-top: 8px;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--app-card-border);
+    text-align: left;
+    font-weight: 400;
+  }
+
+  thead th,
+  tfoot th,
+  tfoot td {
+    font-weight: 600;
+  }
+
+  .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}
