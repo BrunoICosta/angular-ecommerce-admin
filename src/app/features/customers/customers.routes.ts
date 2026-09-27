@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { CustomerWithStats } from '@core/models';
+import { providePtBrPaginatorIntl } from '@shared/i18n/paginator-intl';
 
 import { customerResolver } from './data-access/customer.resolver';
 import { CustomersService } from './data-access/customers.service';
@@ -8,7 +9,7 @@ import { CustomersService } from './data-access/customers.service';
 export const CUSTOMERS_ROUTES: Routes = [
   {
     path: '',
-    providers: [CustomersService],
+    providers: [CustomersService, providePtBrPaginatorIntl()],
     children: [
       {
         path: '',

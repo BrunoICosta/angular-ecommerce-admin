@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { pendingChangesGuard } from '@core/guards/pending-changes.guard';
 import { Product } from '@core/models';
+import { providePtBrPaginatorIntl } from '@shared/i18n/paginator-intl';
 
 import { productResolver } from './data-access/product.resolver';
 import { ProductsService } from './data-access/products.service';
@@ -14,7 +15,7 @@ const loadFormPage = () =>
 export const PRODUCTS_ROUTES: Routes = [
   {
     path: '',
-    providers: [ProductsService],
+    providers: [ProductsService, providePtBrPaginatorIntl()],
     children: [
       {
         path: '',

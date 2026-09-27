@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { Order } from '@core/models';
+import { providePtBrPaginatorIntl } from '@shared/i18n/paginator-intl';
 
 import { orderResolver } from './data-access/order.resolver';
 import { OrdersService } from './data-access/orders.service';
@@ -8,7 +9,7 @@ import { OrdersService } from './data-access/orders.service';
 export const ORDERS_ROUTES: Routes = [
   {
     path: '',
-    providers: [OrdersService],
+    providers: [OrdersService, providePtBrPaginatorIntl()],
     children: [
       {
         path: '',

@@ -17,6 +17,11 @@ export class PtBrPaginatorIntl extends MatPaginatorIntl {
   };
 }
 
+/**
+ * Provided per list feature (route providers) instead of globally: importing
+ * the paginator entry point from app.config pulled MatSelect and MatFormField
+ * into the initial bundle.
+ */
 export function providePtBrPaginatorIntl(): Provider {
   return { provide: MatPaginatorIntl, useClass: PtBrPaginatorIntl };
 }
