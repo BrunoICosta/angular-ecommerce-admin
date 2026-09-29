@@ -1,8 +1,19 @@
-import { DashboardSummary, MonthlyRevenue, Order, PeriodMetric } from '../models';
+import {
+  DashboardSummary,
+  LowStockProduct,
+  MonthlyRevenue,
+  Order,
+  PeriodMetric,
+  TopProduct,
+  stockStatus,
+} from '../models';
 import { SeedData } from './seed/seed-data';
 
 const DAY = 86_400_000;
 const PERIOD_DAYS = 30;
+const TOP_PRODUCTS_DAYS = 90;
+const TOP_PRODUCTS_LIMIT = 5;
+const LOW_STOCK_LIMIT = 6;
 
 function round2(value: number): number {
   return Math.round(value * 100) / 100;
@@ -69,6 +80,11 @@ export function buildDashboardSummary(
     bucket.orders += 1;
   }
 
+  const lowStockAll: LowStockProduct[] = db.products
+    .filter((product) => product.active && stockStatus(product) !== 'in_stock')
+    .sort((a, b) => a.stock / Math.max(1, a.minStock) - b.stock / Math.max(1, b.minStock))
+    .map(({ id, name, sku, stock, minStock }) => ({ id, name, sku, stock, minStock }));
+
   return {
     generatedAt: now.toISOString(),
     revenue,
@@ -76,5 +92,27 @@ export function buildDashboardSummary(
     averageTicket,
     newCustomers,
     revenueByMonth: [...months.values()],
+    topProducts: topProducts(valid, time),
+    lowStock: lowStockAll.slice(0, LOW_STOCK_LIMIT),
+    lowStockTotal: lowStockAll.length,
   };
+}
+
+function topProducts(orders: readonly Order[], now: number): TopProduct[] {
+  const totals = new Map<number, TopProduct>();
+  for (const order of orders) {
+    if (now - new Date(order.createdAt).getTime() > TOP_PRODUCTS_DAYS * DAY) continue;
+    for (const item of order.items) {
+      const entry = totals.get(item.productId) ?? {
+        productId: item.productId,
+        name: item.productName,
+        quantity: 0,
+        revenue: 0,
+      };
+      entry.quantity += item.quantity;
+      entry.revenue = round2(entry.revenue + item.unitPrice * item.quantity);
+      totals.set(item.productId, entry);
+    }
+  }
+  return [...totals.values()].sort((a, b) => b.revenue - a.revenue).slice(0, TOP_PRODUCTS_LIMIT);
 }

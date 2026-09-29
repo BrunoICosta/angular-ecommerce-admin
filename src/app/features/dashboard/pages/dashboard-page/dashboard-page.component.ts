@@ -11,7 +11,9 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { StatTileComponent } from '@shared/components/stat-tile/stat-tile.component';
 import { latestValue } from '@shared/utils/resource.util';
 
+import { LowStockAlertComponent } from '../../components/low-stock-alert/low-stock-alert.component';
 import { RevenueChartComponent } from '../../components/revenue-chart/revenue-chart.component';
+import { TopProductsComponent } from '../../components/top-products/top-products.component';
 import { DashboardService } from '../../data-access/dashboard.service';
 
 interface KpiView {
@@ -29,8 +31,10 @@ interface KpiView {
     MatIconModule,
     ErrorStateComponent,
     PageHeaderComponent,
+    LowStockAlertComponent,
     RevenueChartComponent,
     StatTileComponent,
+    TopProductsComponent,
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.scss',

@@ -50,6 +50,24 @@
       <div class="chart-placeholder" aria-hidden="true"></div>
     }
   </section>
+
+  <div class="columns">
+    <section class="card panel" aria-labelledby="top-products-title">
+      <header class="panel__header">
+        <h2 id="top-products-title">Mais vendidos</h2>
+        <span>Últimos 90 dias, por receita</span>
+      </header>
+      <app-top-products [products]="summary.topProducts" />
+    </section>
+
+    <section class="card panel panel--alert" aria-labelledby="low-stock-title">
+      <header class="panel__header">
+        <h2 id="low-stock-title"><mat-icon aria-hidden="true">warning</mat-icon> Estoque baixo</h2>
+        <span>{{ summary.lowStockTotal }} produto(s) precisam de reposição</span>
+      </header>
+      <app-low-stock-alert [products]="summary.lowStock" [total]="summary.lowStockTotal" />
+    </section>
+  </div>
 } @else {
   <div class="kpis" aria-hidden="true">
     @for (i of [1, 2, 3, 4]; track i) {

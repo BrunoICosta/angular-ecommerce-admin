@@ -11,6 +11,21 @@ export interface MonthlyRevenue {
   orders: number;
 }
 
+export interface TopProduct {
+  productId: number;
+  name: string;
+  quantity: number;
+  revenue: number;
+}
+
+export interface LowStockProduct {
+  id: number;
+  name: string;
+  sku: string;
+  stock: number;
+  minStock: number;
+}
+
 export interface DashboardSummary {
   generatedAt: string;
   revenue: PeriodMetric;
@@ -18,6 +33,11 @@ export interface DashboardSummary {
   averageTicket: PeriodMetric;
   newCustomers: PeriodMetric;
   revenueByMonth: MonthlyRevenue[];
+  /** Best sellers by revenue in the last 90 days. */
+  topProducts: TopProduct[];
+  /** Active products at or below their minimum stock, most critical first. */
+  lowStock: LowStockProduct[];
+  lowStockTotal: number;
 }
 
 /** Percentage change from `previous` to `current`; `null` when there is no baseline. */
