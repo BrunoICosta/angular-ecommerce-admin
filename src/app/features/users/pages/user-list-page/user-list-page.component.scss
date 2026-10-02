@@ -1,0 +1,40 @@
+.person {
+  display: grid;
+  min-width: 200px;
+
+  small {
+    color: var(--app-muted);
+  }
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.you {
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  font-size: 0.75rem;
+}
+
+.role-field {
+  width: 180px;
+  margin: 8px 0;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  color: var(--app-muted);
+}

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { authGuard, guestGuard } from './core/auth/auth.guard';
+import { roleGuard } from './core/auth/role.guard';
 import { ShellComponent } from './core/layout/shell/shell.component';
 
 export const routes: Routes = [
@@ -38,6 +39,12 @@ export const routes: Routes = [
         data: { breadcrumb: 'Clientes' },
         loadChildren: () =>
           import('./features/customers/customers.routes').then((m) => m.CUSTOMERS_ROUTES),
+      },
+      {
+        path: 'users',
+        canMatch: [roleGuard('admin')],
+        data: { breadcrumb: 'Usuários' },
+        loadChildren: () => import('./features/users/users.routes').then((m) => m.USERS_ROUTES),
       },
       {
         path: 'forbidden',

@@ -1,0 +1,95 @@
+<app-page-header
+  title="Usuários"
+  [subtitle]="'Equipe com acesso ao painel · ' + activeCount() + ' ativo(s)'"
+/>
+
+<section class="card" aria-labelledby="users-table-title">
+  <h2 id="users-table-title" class="visually-hidden">Lista de usuários</h2>
+
+  <div class="table-wrapper" [attr.aria-busy]="users.isLoading()">
+    @if (users.isLoading()) {
+      <mat-progress-bar
+        class="table-progress"
+        mode="indeterminate"
+        aria-label="Carregando usuários"
+      />
+    }
+
+    @if (users.error()) {
+      <app-error-state icon="cloud_off" title="Não foi possível carregar os usuários">
+        <button mat-flat-button type="button" (click)="users.reload()">Tentar novamente</button>
+      </app-error-state>
+    } @else if (users.hasValue()) {
+      <table mat-table [dataSource]="users.value()">
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef>Usuário</th>
+          <td mat-cell *matCellDef="let user">
+            <div class="person">
+              <span class="name">
+                {{ user.name }}
+                @if (user.id === currentUserId()) {
+                  <span class="you">você</span>
+                }
+              </span>
+              <small>{{ user.email }}</small>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Perfil</th>
+          <td mat-cell *matCellDef="let user">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="role-field">
+              <mat-label>Perfil</mat-label>
+              <mat-select
+                [value]="user.role"
+                (selectionChange)="changeRole(user, $event.value)"
+                [disabled]="user.id === currentUserId() || savingId() === user.id"
+              >
+                @for (role of roles; track role[0]) {
+                  <mat-option [value]="role[0]">{{ role[1] }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="active">
+          <th mat-header-cell *matHeaderCellDef>Acesso</th>
+          <td mat-cell *matCellDef="let user">
+            <mat-slide-toggle
+              [checked]="user.active"
+              (change)="toggleActive(user, $event.checked)"
+              [disabled]="user.id === currentUserId() || savingId() === user.id"
+              [attr.aria-label]="'Acesso de ' + user.name"
+            >
+              {{ user.active ? 'Ativo' : 'Inativo' }}
+            </mat-slide-toggle>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastLoginAt">
+          <th mat-header-cell *matHeaderCellDef>Último acesso</th>
+          <td mat-cell *matCellDef="let user" class="nowrap">
+            {{ user.lastLoginAt ? (user.lastLoginAt | date: 'dd/MM/yyyy HH:mm') : 'Nunca acessou' }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+    } @else {
+      <div class="skeleton" aria-hidden="true">
+        @for (row of [1, 2, 3, 4]; track row) {
+          <div class="skeleton__row"></div>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<p class="note">
+  <mat-icon aria-hidden="true">info</mat-icon>
+  Gerentes não podem excluir registros nem acessar esta página. Você não pode alterar o próprio
+  perfil.
+</p>
