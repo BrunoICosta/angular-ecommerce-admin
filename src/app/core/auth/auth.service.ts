@@ -74,10 +74,17 @@ export class AuthService {
     );
   }
 
+  /**
+   * Ends the session. When it expired, the current page is kept as `returnUrl`
+   * so the user lands back where they were after signing in again.
+   */
   logout(reason?: 'expired'): void {
+    if (this.token() === null) return;
+    const returnUrl = this.router.url;
     this.setToken(null);
     void this.router.navigate(['/login'], {
-      queryParams: reason === 'expired' ? { expired: 1 } : {},
+      queryParams:
+        reason === 'expired' && !returnUrl.startsWith('/login') ? { expired: 1, returnUrl } : {},
     });
   }
 
