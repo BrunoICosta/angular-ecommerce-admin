@@ -196,6 +196,23 @@ a {
   }
 }
 
+// Phones: full-width filters and fewer table columns.
+@media (max-width: 599.98px) {
+  .filters {
+    padding: 12px;
+
+    mat-form-field,
+    .filters__search {
+      flex-basis: 100% !important;
+      max-width: none !important;
+    }
+  }
+
+  .table-wrapper .hide-sm {
+    display: none;
+  }
+}
+
 @keyframes skeleton-pulse {
   from {
     background-position: 100% 0;

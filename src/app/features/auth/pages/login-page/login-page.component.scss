@@ -69,6 +69,20 @@
   padding: 24px 16px;
 }
 
+.mobile-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  color: var(--mat-sys-primary);
+  font-weight: 700;
+  font-size: 1.125rem;
+
+  @media (min-width: 960px) {
+    display: none;
+  }
+}
+
 .login__card {
   width: min(420px, 100%);
 
