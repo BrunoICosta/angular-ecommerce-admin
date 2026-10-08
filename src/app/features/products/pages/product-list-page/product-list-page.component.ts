@@ -3,14 +3,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   input,
   linkedSignal,
   signal,
 } from '@angular/core';
-import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,8 +21,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router, RouterLink } from '@angular/router';
-import { debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
+import { RouterLink } from '@angular/router';
+import { filter, finalize, switchMap, tap } from 'rxjs';
 
 import { AuthService } from '@core/auth/auth.service';
 import { PRODUCT_CATEGORIES, Product, STOCK_STATUS_LABELS, StockStatus } from '@core/models';
@@ -36,8 +35,8 @@ import {
   toDirection,
   toPageSize,
   toPositiveInt,
-  toQueryParams,
 } from '@shared/utils/list-query.util';
+import { injectQueryNavigator, syncedSearchControl } from '@shared/utils/list-page.util';
 import { latestValue } from '@shared/utils/resource.util';
 
 import { StockStatusChipComponent } from '../../components/stock-status-chip/stock-status-chip.component';
@@ -75,7 +74,7 @@ const DEFAULTS = { page: 1, size: PAGE_SIZE_OPTIONS[0], sort: 'name', dir: 'asc'
 })
 export class ProductListPageComponent {
   private readonly productsApi = inject(ProductsService);
-  private readonly router = inject(Router);
+  private readonly navigate = injectQueryNavigator(DEFAULTS);
   private readonly confirm = inject(ConfirmService);
   private readonly notifications = inject(NotificationService);
 
@@ -120,7 +119,7 @@ export class ProductListPageComponent {
     return Boolean(q || category || stock);
   });
 
-  protected readonly search = new FormControl('', { nonNullable: true });
+  protected readonly search = syncedSearchControl(this.q, (q) => this.navigate({ q, page: null }));
 
   /** Selected ids on the current page; cleared whenever the query changes. */
   protected readonly selected = linkedSignal<ProductQuery, ReadonlySet<number>>({
@@ -135,18 +134,6 @@ export class ProductListPageComponent {
     () => !this.allSelected() && this.pageIds().some((id) => this.selected().has(id)),
   );
   protected readonly deleting = signal(false);
-
-  constructor() {
-    // Keep the search box in sync when the URL changes (e.g. back button).
-    effect(() => {
-      const q = this.q() ?? '';
-      if (this.search.value !== q) this.search.setValue(q, { emitEvent: false });
-    });
-
-    this.search.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed())
-      .subscribe((q) => this.navigate({ q: q.trim(), page: null }));
-  }
 
   protected toggle(id: number): void {
     this.selected.update((current) => {
@@ -226,12 +213,5 @@ export class ProductListPageComponent {
 
   protected clearFilters(): void {
     this.navigate({ q: null, category: null, stock: null, page: null });
-  }
-
-  private navigate(patch: Record<string, string | number | null>): void {
-    void this.router.navigate([], {
-      queryParams: toQueryParams(patch, DEFAULTS),
-      queryParamsHandling: 'merge',
-    });
   }
 }

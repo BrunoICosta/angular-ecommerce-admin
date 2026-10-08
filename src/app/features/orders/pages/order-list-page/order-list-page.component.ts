@@ -1,7 +1,7 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
-import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipListboxChange, MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,8 +11,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { Router, RouterLink } from '@angular/router';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 import { ORDER_STATUSES, ORDER_STATUS_LABELS, PAYMENT_METHOD_LABELS } from '@core/models';
 import { ErrorStateComponent } from '@shared/components/error-state/error-state.component';
@@ -23,8 +22,8 @@ import {
   toDirection,
   toPageSize,
   toPositiveInt,
-  toQueryParams,
 } from '@shared/utils/list-query.util';
+import { injectQueryNavigator, syncedSearchControl } from '@shared/utils/list-page.util';
 import { LabelPipe } from '@shared/pipes/label.pipe';
 import { latestValue } from '@shared/utils/resource.util';
 
@@ -61,7 +60,7 @@ const DEFAULTS = { page: 1, size: PAGE_SIZE_OPTIONS[0], sort: 'createdAt', dir: 
 })
 export class OrderListPageComponent {
   private readonly ordersApi = inject(OrdersService);
-  private readonly router = inject(Router);
+  private readonly navigate = injectQueryNavigator(DEFAULTS);
 
   readonly page = input<string>();
   readonly size = input<string>();
@@ -96,18 +95,7 @@ export class OrderListPageComponent {
   protected readonly result = latestValue(this.orders);
   protected readonly hasFilters = computed(() => Boolean(this.query().q || this.query().status));
 
-  protected readonly search = new FormControl('', { nonNullable: true });
-
-  constructor() {
-    effect(() => {
-      const q = this.q() ?? '';
-      if (this.search.value !== q) this.search.setValue(q, { emitEvent: false });
-    });
-
-    this.search.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed())
-      .subscribe((q) => this.navigate({ q: q.trim(), page: null }));
-  }
+  protected readonly search = syncedSearchControl(this.q, (q) => this.navigate({ q, page: null }));
 
   protected onStatus(change: MatChipListboxChange): void {
     this.navigate({ status: (change.value as string | undefined) ?? null, page: null });
@@ -123,12 +111,5 @@ export class OrderListPageComponent {
 
   protected clearFilters(): void {
     this.navigate({ q: null, status: null, page: null });
-  }
-
-  private navigate(patch: Record<string, string | number | null>): void {
-    void this.router.navigate([], {
-      queryParams: toQueryParams(patch, DEFAULTS),
-      queryParamsHandling: 'merge',
-    });
   }
 }
