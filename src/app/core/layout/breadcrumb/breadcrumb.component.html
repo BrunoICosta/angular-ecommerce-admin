@@ -1,12 +1,16 @@
 @if (crumbs().length) {
-  <nav aria-label="Você está em">
+  <nav [attr.aria-label]="'nav.breadcrumb' | transloco">
     <ol>
       @for (crumb of crumbs(); track crumb.url; let last = $last) {
         <li>
           @if (last) {
-            <span aria-current="page">{{ crumb.label }}</span>
+            <span aria-current="page">{{
+              crumb.translate ? (crumb.label | transloco) : crumb.label
+            }}</span>
           } @else {
-            <a [routerLink]="crumb.url">{{ crumb.label }}</a>
+            <a [routerLink]="crumb.url">{{
+              crumb.translate ? (crumb.label | transloco) : crumb.label
+            }}</a>
             <mat-icon aria-hidden="true">chevron_right</mat-icon>
           }
         </li>

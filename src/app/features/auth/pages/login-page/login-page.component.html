@@ -1,33 +1,33 @@
-<main class="login">
+<main class="login" *transloco="let t; prefix: 'auth'">
   <section class="login__brand" aria-hidden="true">
     <div class="brand-mark">
       <mat-icon>storefront</mat-icon>
-      <span>Loja Admin</span>
+      <span>{{ 'app.name' | transloco }}</span>
     </div>
     <div class="brand-copy">
-      <h2>Tudo da sua loja em um só lugar.</h2>
+      <h2>{{ t('headline') }}</h2>
       <ul>
-        <li><mat-icon>insights</mat-icon> Indicadores de vendas em tempo real</li>
-        <li><mat-icon>inventory_2</mat-icon> Catálogo e estoque sob controle</li>
-        <li><mat-icon>local_shipping</mat-icon> Pedidos do pagamento à entrega</li>
+        <li><mat-icon>insights</mat-icon> {{ t('featureMetrics') }}</li>
+        <li><mat-icon>inventory_2</mat-icon> {{ t('featureCatalog') }}</li>
+        <li><mat-icon>local_shipping</mat-icon> {{ t('featureOrders') }}</li>
       </ul>
     </div>
-    <p class="brand-footer">Projeto de portfólio · dados fictícios</p>
+    <p class="brand-footer">{{ t('footer') }}</p>
   </section>
 
   <section class="login__panel">
     <div class="login__card">
       <header>
-        <span class="mobile-brand" aria-hidden="true"
-          ><mat-icon>storefront</mat-icon> Loja Admin</span
-        >
-        <h1>Entrar</h1>
-        <p>Acesse o painel administrativo da loja.</p>
+        <span class="mobile-brand" aria-hidden="true">
+          <mat-icon>storefront</mat-icon> {{ 'app.name' | transloco }}
+        </span>
+        <h1>{{ t('title') }}</h1>
+        <p>{{ t('subtitle') }}</p>
       </header>
 
       @if (expired()) {
         <p class="notice notice--info" role="status">
-          <mat-icon>schedule</mat-icon> Sua sessão expirou. Entre novamente.
+          <mat-icon>schedule</mat-icon> {{ t('expired') }}
         </p>
       }
       @if (errorMessage(); as message) {
@@ -36,18 +36,18 @@
 
       <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
         <mat-form-field appearance="outline">
-          <mat-label>E-mail</mat-label>
+          <mat-label>{{ t('email') }}</mat-label>
           <input matInput type="email" formControlName="email" autocomplete="username" />
           <mat-icon matPrefix>mail</mat-icon>
           @if (form.controls.email.hasError('required')) {
-            <mat-error>Informe o e-mail.</mat-error>
+            <mat-error>{{ t('emailRequired') }}</mat-error>
           } @else if (form.controls.email.hasError('email')) {
-            <mat-error>Informe um e-mail válido.</mat-error>
+            <mat-error>{{ t('emailInvalid') }}</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Senha</mat-label>
+          <mat-label>{{ t('password') }}</mat-label>
           <input
             matInput
             [type]="hidePassword() ? 'password' : 'text'"
@@ -60,46 +60,46 @@
             matSuffix
             type="button"
             (click)="hidePassword.set(!hidePassword())"
-            [attr.aria-label]="hidePassword() ? 'Mostrar senha' : 'Ocultar senha'"
+            [attr.aria-label]="t(hidePassword() ? 'showPassword' : 'hidePassword')"
             [attr.aria-pressed]="!hidePassword()"
           >
             <mat-icon>{{ hidePassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
           </button>
           @if (form.controls.password.hasError('required')) {
-            <mat-error>Informe a senha.</mat-error>
+            <mat-error>{{ t('passwordRequired') }}</mat-error>
           } @else if (form.controls.password.hasError('minlength')) {
-            <mat-error>A senha tem pelo menos 6 caracteres.</mat-error>
+            <mat-error>{{ t('passwordMinLength') }}</mat-error>
           }
         </mat-form-field>
 
         <button mat-flat-button type="submit" class="submit" [disabled]="submitting()">
           @if (submitting()) {
-            <mat-spinner diameter="20" aria-label="Entrando" />
+            <mat-spinner diameter="20" [attr.aria-label]="t('signingIn')" />
           } @else {
-            Entrar
+            {{ t('submit') }}
           }
         </button>
       </form>
 
       <aside class="demo" aria-labelledby="demo-title">
-        <h2 id="demo-title">Contas de demonstração</h2>
+        <h2 id="demo-title">{{ t('demoTitle') }}</h2>
         <p>
-          Senha para todas: <code>{{ demoPassword }}</code>
+          {{ t('demoPassword') }} <code>{{ demoPassword }}</code>
         </p>
         <ul>
           @for (account of demoAccounts; track account.email) {
             <li>
               <div>
                 <strong>{{ account.email }}</strong>
-                <span>{{ account.description }}</span>
+                <span>{{ t(account.descriptionKey) }}</span>
               </div>
               <button
                 mat-stroked-button
                 type="button"
-                [attr.aria-label]="'Usar a conta ' + account.email"
+                [attr.aria-label]="t('useAccountLabel', { email: account.email })"
                 (click)="useDemoAccount(account.email)"
               >
-                Usar
+                {{ t('useAccount') }}
               </button>
             </li>
           }

@@ -1,0 +1,151 @@
+{
+  "app": {
+    "name": "Loja Admin"
+  },
+  "titles": {
+    "login": "Entrar",
+    "dashboard": "Dashboard",
+    "products": "Produtos",
+    "productNew": "Novo produto",
+    "productEdit": "Editar produto",
+    "orders": "Pedidos",
+    "orderDetail": "Detalhes do pedido",
+    "customers": "Clientes",
+    "customerDetail": "Cliente",
+    "users": "Usuários",
+    "forbidden": "Acesso negado",
+    "notFound": "Página não encontrada"
+  },
+  "nav": {
+    "main": "Navegação principal",
+    "breadcrumb": "Você está em",
+    "dashboard": "Dashboard",
+    "products": "Produtos",
+    "newProduct": "Novo produto",
+    "orders": "Pedidos",
+    "customers": "Clientes",
+    "users": "Usuários",
+    "forbidden": "Acesso negado"
+  },
+  "shell": {
+    "skipToContent": "Pular para o conteúdo",
+    "loading": "Carregando dados",
+    "openMenu": "Abrir menu",
+    "expandMenu": "Expandir menu",
+    "collapseMenu": "Recolher menu",
+    "userMenu": "Menu do usuário",
+    "logout": "Sair",
+    "lightTheme": "Ativar tema claro",
+    "darkTheme": "Ativar tema escuro",
+    "lightThemeShort": "Tema claro",
+    "darkThemeShort": "Tema escuro"
+  },
+  "language": {
+    "label": "Idioma",
+    "current": "Idioma: {{ name }}. Alterar idioma",
+    "pt-BR": "Português (Brasil)",
+    "en": "English"
+  },
+  "common": {
+    "close": "Fechar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "retry": "Tentar novamente",
+    "search": "Buscar",
+    "clearFilters": "Limpar filtros",
+    "all": "Todos",
+    "allCategories": "Todas",
+    "actions": "Ações",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "saving": "Salvando",
+    "never": "Nunca",
+    "unit": "{{ count }} unidade",
+    "units": "{{ count }} unidades",
+    "connectionHint": "Verifique sua conexão e tente novamente."
+  },
+  "enums": {
+    "orderStatus": {
+      "pending": "Aguardando pagamento",
+      "paid": "Pago",
+      "shipped": "Enviado",
+      "delivered": "Entregue",
+      "cancelled": "Cancelado"
+    },
+    "paymentMethod": {
+      "pix": "Pix",
+      "credit_card": "Cartão de crédito",
+      "boleto": "Boleto"
+    },
+    "stockStatus": {
+      "in_stock": "Em estoque",
+      "low_stock": "Estoque baixo",
+      "out_of_stock": "Esgotado"
+    },
+    "role": {
+      "admin": "Administrador",
+      "manager": "Gerente"
+    },
+    "category": {
+      "electronics": "Eletrônicos",
+      "computers": "Informática",
+      "home": "Casa e Cozinha",
+      "fashion": "Moda",
+      "sports": "Esportes",
+      "beauty": "Beleza",
+      "books": "Livros",
+      "toys": "Brinquedos"
+    }
+  },
+  "httpErrors": {
+    "0": "Não foi possível conectar ao servidor. Verifique sua conexão.",
+    "400": "A requisição tem dados inválidos.",
+    "401": "Sua sessão expirou. Entre novamente.",
+    "403": "Você não tem permissão para esta ação.",
+    "404": "O registro solicitado não foi encontrado.",
+    "409": "O registro entrou em conflito com outro já existente.",
+    "422": "Não foi possível processar os dados enviados.",
+    "500": "O servidor encontrou um erro. Tente novamente em instantes.",
+    "unexpected": "Ocorreu um erro inesperado."
+  },
+  "apiErrors": {
+    "invalid_credentials": "E-mail ou senha inválidos.",
+    "user_inactive": "Este usuário está desativado.",
+    "unauthenticated": "Autenticação necessária.",
+    "session_expired": "Sua sessão expirou.",
+    "forbidden": "Você não tem permissão para esta ação.",
+    "customer_not_found": "Cliente não encontrado.",
+    "order_not_found": "Pedido não encontrado.",
+    "duplicate_sku": "Já existe um produto com o SKU {{ sku }}.",
+    "invalid_transition": "Esta mudança de status não é permitida para o pedido."
+  },
+  "session": {
+    "expired": "Sua sessão expirou. Entre novamente."
+  },
+  "paginator": {
+    "itemsPerPage": "Itens por página",
+    "next": "Próxima página",
+    "previous": "Página anterior",
+    "first": "Primeira página",
+    "last": "Última página",
+    "range": "{{ start }} – {{ end }} de {{ total }}",
+    "empty": "0 de 0"
+  },
+  "pendingChanges": {
+    "title": "Descartar alterações?",
+    "message": "Você tem alterações não salvas. Se sair agora, elas serão perdidas.",
+    "confirm": "Descartar",
+    "cancel": "Continuar editando"
+  },
+  "stat": {
+    "up": "Alta de",
+    "down": "Queda de"
+  },
+  "errorPages": {
+    "notFoundTitle": "Página não encontrada",
+    "notFoundMessage": "O endereço acessado não existe ou foi removido.",
+    "forbiddenTitle": "Acesso negado",
+    "forbiddenMessage": "Seu perfil não tem permissão para acessar esta área. Fale com um administrador.",
+    "backToDashboard": "Voltar ao dashboard"
+  }
+}

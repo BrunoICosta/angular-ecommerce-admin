@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
+import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { finalize } from 'rxjs';
 
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '@core/auth/auth.model';
@@ -21,6 +22,8 @@ import { httpErrorMessage } from '@core/http/http-error.util';
     MatIconModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    TranslocoDirective,
+    TranslocoPipe,
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
@@ -29,6 +32,7 @@ import { httpErrorMessage } from '@core/http/http-error.util';
 export class LoginPageComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly transloco = inject(TranslocoService);
 
   /** Bound from the query string by `withComponentInputBinding()`. */
   readonly returnUrl = input<string>();
@@ -63,7 +67,10 @@ export class LoginPageComponent {
       .pipe(finalize(() => this.submitting.set(false)))
       .subscribe({
         next: () => void this.router.navigateByUrl(this.safeReturnUrl()),
-        error: (error: unknown) => this.errorMessage.set(httpErrorMessage(error)),
+        error: (error: unknown) =>
+          this.errorMessage.set(
+            httpErrorMessage(error, (key, params) => this.transloco.translate(key, params)),
+          ),
       });
   }
 

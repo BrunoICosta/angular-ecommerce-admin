@@ -1,28 +1,34 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { TranslationParams } from '../i18n/i18n.model';
 
-const STATUS_MESSAGES: Record<number, string> = {
-  0: 'Não foi possível conectar ao servidor. Verifique sua conexão.',
-  400: 'A requisição tem dados inválidos.',
-  401: 'Sua sessão expirou. Entre novamente.',
-  403: 'Você não tem permissão para esta ação.',
-  404: 'O registro solicitado não foi encontrado.',
-  409: 'O registro entrou em conflito com outro já existente.',
-  422: 'Não foi possível processar os dados enviados.',
-};
+import { ApiError } from '../models';
 
-/** Turns any HTTP failure into a message that can be shown to the user (pt-BR). */
-export function httpErrorMessage(error: unknown): string {
-  if (!(error instanceof HttpErrorResponse)) return 'Ocorreu um erro inesperado.';
+export type Translate = (key: string, params?: TranslationParams) => string;
+
+const KNOWN_STATUSES = [0, 400, 401, 403, 404, 409, 422];
+
+function isApiError(body: unknown): body is ApiError {
+  return typeof body === 'object' && body !== null && 'error' in body;
+}
+
+/**
+ * Turns any HTTP failure into a message for the user, in the active language:
+ * a known API error code wins, then the HTTP status, then a generic message.
+ */
+export function httpErrorMessage(error: unknown, translate: Translate): string {
+  if (!(error instanceof HttpErrorResponse)) return translate('httpErrors.unexpected');
 
   const body: unknown = error.error;
-  if (
-    typeof body === 'object' &&
-    body !== null &&
-    'error' in body &&
-    typeof body.error === 'string'
-  ) {
-    return body.error;
+  if (isApiError(body)) {
+    if (body.code) {
+      const key = `apiErrors.${body.code}`;
+      const translated = translate(key, body.params);
+      if (translated !== key) return translated;
+    }
+    if (typeof body.error === 'string') return body.error;
   }
-  if (error.status >= 500) return 'O servidor encontrou um erro. Tente novamente em instantes.';
-  return STATUS_MESSAGES[error.status] ?? 'Ocorreu um erro inesperado.';
+  if (error.status >= 500) return translate('httpErrors.500');
+  return KNOWN_STATUSES.includes(error.status)
+    ? translate(`httpErrors.${error.status}`)
+    : translate('httpErrors.unexpected');
 }

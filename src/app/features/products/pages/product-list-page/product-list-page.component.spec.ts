@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { AuthService } from '@core/auth/auth.service';
+import { provideI18nTesting } from '@core/i18n/testing/i18n-testing';
 import { Page, Product } from '@core/models';
 
 import { ProductsService } from '../../data-access/products.service';
@@ -42,6 +43,7 @@ describe('ProductListPageComponent', () => {
       imports: [ProductListPageComponent],
       providers: [
         provideZonelessChangeDetection(),
+        provideI18nTesting(),
         provideRouter([]),
         { provide: ProductsService, useValue: api },
         { provide: AuthService, useValue: { isAdmin } },

@@ -1,0 +1,151 @@
+{
+  "app": {
+    "name": "Store Admin"
+  },
+  "titles": {
+    "login": "Sign in",
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "productNew": "New product",
+    "productEdit": "Edit product",
+    "orders": "Orders",
+    "orderDetail": "Order details",
+    "customers": "Customers",
+    "customerDetail": "Customer",
+    "users": "Users",
+    "forbidden": "Access denied",
+    "notFound": "Page not found"
+  },
+  "nav": {
+    "main": "Main navigation",
+    "breadcrumb": "You are here",
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "newProduct": "New product",
+    "orders": "Orders",
+    "customers": "Customers",
+    "users": "Users",
+    "forbidden": "Access denied"
+  },
+  "shell": {
+    "skipToContent": "Skip to content",
+    "loading": "Loading data",
+    "openMenu": "Open menu",
+    "expandMenu": "Expand menu",
+    "collapseMenu": "Collapse menu",
+    "userMenu": "User menu",
+    "logout": "Sign out",
+    "lightTheme": "Switch to light theme",
+    "darkTheme": "Switch to dark theme",
+    "lightThemeShort": "Light theme",
+    "darkThemeShort": "Dark theme"
+  },
+  "language": {
+    "label": "Language",
+    "current": "Language: {{ name }}. Change language",
+    "pt-BR": "Português (Brasil)",
+    "en": "English"
+  },
+  "common": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "retry": "Try again",
+    "search": "Search",
+    "clearFilters": "Clear filters",
+    "all": "All",
+    "allCategories": "All",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "saving": "Saving",
+    "never": "Never",
+    "unit": "{{ count }} unit",
+    "units": "{{ count }} units",
+    "connectionHint": "Check your connection and try again."
+  },
+  "enums": {
+    "orderStatus": {
+      "pending": "Awaiting payment",
+      "paid": "Paid",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "paymentMethod": {
+      "pix": "Pix",
+      "credit_card": "Credit card",
+      "boleto": "Bank slip (boleto)"
+    },
+    "stockStatus": {
+      "in_stock": "In stock",
+      "low_stock": "Low stock",
+      "out_of_stock": "Out of stock"
+    },
+    "role": {
+      "admin": "Administrator",
+      "manager": "Manager"
+    },
+    "category": {
+      "electronics": "Electronics",
+      "computers": "Computers",
+      "home": "Home & Kitchen",
+      "fashion": "Fashion",
+      "sports": "Sports",
+      "beauty": "Beauty",
+      "books": "Books",
+      "toys": "Toys"
+    }
+  },
+  "httpErrors": {
+    "0": "Could not reach the server. Check your connection.",
+    "400": "The request contains invalid data.",
+    "401": "Your session has expired. Please sign in again.",
+    "403": "You are not allowed to perform this action.",
+    "404": "The requested record was not found.",
+    "409": "The record conflicts with an existing one.",
+    "422": "The submitted data could not be processed.",
+    "500": "The server ran into an error. Please try again shortly.",
+    "unexpected": "An unexpected error occurred."
+  },
+  "apiErrors": {
+    "invalid_credentials": "Invalid email or password.",
+    "user_inactive": "This user is deactivated.",
+    "unauthenticated": "Authentication required.",
+    "session_expired": "Your session has expired.",
+    "forbidden": "You are not allowed to perform this action.",
+    "customer_not_found": "Customer not found.",
+    "order_not_found": "Order not found.",
+    "duplicate_sku": "A product with SKU {{ sku }} already exists.",
+    "invalid_transition": "This status change is not allowed for the order."
+  },
+  "session": {
+    "expired": "Your session has expired. Please sign in again."
+  },
+  "paginator": {
+    "itemsPerPage": "Items per page",
+    "next": "Next page",
+    "previous": "Previous page",
+    "first": "First page",
+    "last": "Last page",
+    "range": "{{ start }} – {{ end }} of {{ total }}",
+    "empty": "0 of 0"
+  },
+  "pendingChanges": {
+    "title": "Discard changes?",
+    "message": "You have unsaved changes. If you leave now, they will be lost.",
+    "confirm": "Discard",
+    "cancel": "Keep editing"
+  },
+  "stat": {
+    "up": "Up",
+    "down": "Down"
+  },
+  "errorPages": {
+    "notFoundTitle": "Page not found",
+    "notFoundMessage": "The address you opened does not exist or was removed.",
+    "forbiddenTitle": "Access denied",
+    "forbiddenMessage": "Your role cannot access this area. Please contact an administrator.",
+    "backToDashboard": "Back to dashboard"
+  }
+}

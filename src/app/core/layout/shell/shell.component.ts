@@ -10,11 +10,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { filter, map } from 'rxjs';
 
 import { AuthService } from '../../auth/auth.service';
 import { LoadingService } from '../../http/loading.service';
-import { ROLE_LABELS } from '../../models';
 import { ThemeService } from '../../theme/theme.service';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 import { NAV_ITEMS } from '../nav-items';
@@ -32,6 +32,7 @@ function readCollapsed(): boolean {
 @Component({
   selector: 'app-shell',
   imports: [
+    TranslocoDirective,
     BreadcrumbComponent,
     RouterOutlet,
     RouterLink,
@@ -67,10 +68,6 @@ export class ShellComponent {
   protected readonly drawerOpen = signal(false);
 
   protected readonly user = this.auth.user;
-  protected readonly roleLabel = computed(() => {
-    const role = this.auth.role();
-    return role ? ROLE_LABELS[role] : '';
-  });
   protected readonly initials = computed(() =>
     (this.user()?.name ?? '')
       .split(' ')

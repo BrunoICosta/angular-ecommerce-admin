@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 import { pendingChangesGuard } from '@core/guards/pending-changes.guard';
 import { Product } from '@core/models';
-import { providePtBrPaginatorIntl } from '@shared/i18n/paginator-intl';
+import { provideI18nPaginatorIntl } from '@shared/i18n/paginator-intl';
 
 import { productResolver } from './data-access/product.resolver';
 import { ProductsService } from './data-access/products.service';
@@ -15,11 +15,11 @@ const loadFormPage = () =>
 export const PRODUCTS_ROUTES: Routes = [
   {
     path: '',
-    providers: [ProductsService, providePtBrPaginatorIntl()],
+    providers: [ProductsService, provideI18nPaginatorIntl()],
     children: [
       {
         path: '',
-        title: 'Produtos · Loja Admin',
+        title: 'titles.products',
         loadComponent: () =>
           import('./pages/product-list-page/product-list-page.component').then(
             (m) => m.ProductListPageComponent,
@@ -27,17 +27,17 @@ export const PRODUCTS_ROUTES: Routes = [
       },
       {
         path: 'new',
-        title: 'Novo produto · Loja Admin',
-        data: { breadcrumb: 'Novo produto' },
+        title: 'titles.productNew',
+        data: { breadcrumb: 'nav.newProduct' },
         canDeactivate: [pendingChangesGuard],
         loadComponent: loadFormPage,
       },
       {
         path: ':id/edit',
-        title: 'Editar produto · Loja Admin',
+        title: 'titles.productEdit',
         resolve: { product: productResolver },
         canDeactivate: [pendingChangesGuard],
-        data: { breadcrumb: (data: { product?: Product }) => data.product?.name ?? 'Editar' },
+        data: { breadcrumb: (data: { product?: Product }) => data.product?.name ?? '' },
         loadComponent: loadFormPage,
       },
     ],

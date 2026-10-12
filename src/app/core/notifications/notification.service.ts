@@ -1,11 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslocoService } from '@jsverse/transloco';
 
 type Tone = 'success' | 'error' | 'info';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
   private readonly snackBar = inject(MatSnackBar);
+  private readonly transloco = inject(TranslocoService);
 
   success(message: string): void {
     this.open(message, 'success', 3500);
@@ -20,7 +22,7 @@ export class NotificationService {
   }
 
   private open(message: string, tone: Tone, duration: number): void {
-    this.snackBar.open(message, 'Fechar', {
+    this.snackBar.open(message, this.transloco.translate('common.close'), {
       duration,
       panelClass: ['app-snackbar', `app-snackbar--${tone}`],
       horizontalPosition: 'end',

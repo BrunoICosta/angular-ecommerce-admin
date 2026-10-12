@@ -1,6 +1,7 @@
 import { Role } from '../models';
 
 export interface NavItem {
+  /** Translation key. */
   label: string;
   icon: string;
   path: string;
@@ -9,9 +10,9 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { label: 'Dashboard', icon: 'space_dashboard', path: '/dashboard' },
-  { label: 'Produtos', icon: 'inventory_2', path: '/products' },
-  { label: 'Pedidos', icon: 'receipt_long', path: '/orders' },
-  { label: 'Clientes', icon: 'group', path: '/customers' },
-  { label: 'Usuários', icon: 'manage_accounts', path: '/users', roles: ['admin'] },
+  { label: 'nav.dashboard', icon: 'space_dashboard', path: '/dashboard' },
+  { label: 'nav.products', icon: 'inventory_2', path: '/products' },
+  { label: 'nav.orders', icon: 'receipt_long', path: '/orders' },
+  { label: 'nav.customers', icon: 'group', path: '/customers' },
+  { label: 'nav.users', icon: 'manage_accounts', path: '/users', roles: ['admin'] },
 ];

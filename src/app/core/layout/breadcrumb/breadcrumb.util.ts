@@ -18,7 +18,9 @@ export function buildBreadcrumbs(root: ActivatedRouteSnapshot): Breadcrumb[] {
     if (def) {
       const label = typeof def === 'function' ? def(route.data) : def;
       const url = '/' + segments.join('/');
-      if (label && crumbs.at(-1)?.url !== url) crumbs.push({ label, url });
+      if (label && crumbs.at(-1)?.url !== url) {
+        crumbs.push({ label, url, translate: typeof def === 'string' });
+      }
     }
     route = route.firstChild;
   }

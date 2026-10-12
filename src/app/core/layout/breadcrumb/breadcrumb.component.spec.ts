@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 
+import { provideI18nTesting } from '../../i18n/testing/i18n-testing';
 import { BreadcrumbComponent } from './breadcrumb.component';
 
 @Component({
@@ -18,10 +19,11 @@ describe('BreadcrumbComponent', () => {
     TestBed.configureTestingModule({
       providers: [
         provideZonelessChangeDetection(),
+        provideI18nTesting(),
         provideRouter([
           {
             path: 'products',
-            data: { breadcrumb: 'Produtos' },
+            data: { breadcrumb: 'nav.products' },
             children: [
               { path: '', component: HostComponent },
               {

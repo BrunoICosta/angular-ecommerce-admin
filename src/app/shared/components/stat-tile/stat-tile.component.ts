@@ -1,11 +1,12 @@
-import { DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPercentPipe } from '@jsverse/transloco-locale';
 
 /** KPI tile: label, formatted value and an optional trend versus a previous period. */
 @Component({
   selector: 'app-stat-tile',
-  imports: [DecimalPipe, MatIconModule],
+  imports: [MatIconModule, TranslocoPercentPipe, TranslocoPipe],
   template: `
     <div class="top">
       <span class="label">{{ label() }}</span>
@@ -17,8 +18,8 @@ import { MatIconModule } from '@angular/material/icon';
     @if (trend() !== null) {
       <span class="trend" [class.trend--up]="trendUp()" [class.trend--down]="!trendUp()">
         <mat-icon aria-hidden="true">{{ trendUp() ? 'trending_up' : 'trending_down' }}</mat-icon>
-        <span class="visually-hidden">{{ trendUp() ? 'Alta de' : 'Queda de' }}</span>
-        {{ absTrend() | number: '1.0-1' }}%
+        <span class="visually-hidden">{{ (trendUp() ? 'stat.up' : 'stat.down') | transloco }}</span>
+        {{ absTrend() / 100 | translocoPercent: { maximumFractionDigits: 1 } }}
         <span class="hint">{{ hint() }}</span>
       </span>
     } @else if (hint()) {

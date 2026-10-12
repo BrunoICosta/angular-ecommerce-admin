@@ -2,6 +2,8 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 
+import { TranslocoService } from '@jsverse/transloco';
+
 import { AuthService } from '../auth/auth.service';
 import { NotificationService } from '../notifications/notification.service';
 import { SKIP_ERROR_TOAST } from './http-context.tokens';
@@ -16,6 +18,7 @@ import { httpErrorMessage } from './http-error.util';
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   const notifications = inject(NotificationService);
+  const transloco = inject(TranslocoService);
 
   return next(req).pipe(
     catchError((error: unknown) => {
@@ -24,9 +27,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       if (sessionExpired) {
         auth.logout('expired');
-        notifications.info('Sua sessão expirou. Entre novamente.');
+        notifications.info(transloco.translate('session.expired'));
       } else if (!req.context.get(SKIP_ERROR_TOAST)) {
-        notifications.error(httpErrorMessage(error));
+        notifications.error(
+          httpErrorMessage(error, (key, params) => transloco.translate(key, params)),
+        );
       }
       return throwError(() => error);
     }),

@@ -5,6 +5,7 @@ import { Router, provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AuthService } from '@core/auth/auth.service';
+import { provideI18nTesting } from '@core/i18n/testing/i18n-testing';
 
 import { LoginPageComponent } from './login-page.component';
 
@@ -20,6 +21,7 @@ describe('LoginPageComponent', () => {
       imports: [LoginPageComponent],
       providers: [
         provideZonelessChangeDetection(),
+        provideI18nTesting(),
         provideRouter([]),
         { provide: AuthService, useValue: auth },
       ],

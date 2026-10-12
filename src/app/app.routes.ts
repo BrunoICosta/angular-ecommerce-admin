@@ -19,36 +19,36 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
         path: 'dashboard',
-        data: { breadcrumb: 'Dashboard' },
+        data: { breadcrumb: 'nav.dashboard' },
         loadChildren: () =>
           import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
       },
       {
         path: 'products',
-        data: { breadcrumb: 'Produtos' },
+        data: { breadcrumb: 'nav.products' },
         loadChildren: () =>
           import('./features/products/products.routes').then((m) => m.PRODUCTS_ROUTES),
       },
       {
         path: 'orders',
-        data: { breadcrumb: 'Pedidos' },
+        data: { breadcrumb: 'nav.orders' },
         loadChildren: () => import('./features/orders/orders.routes').then((m) => m.ORDERS_ROUTES),
       },
       {
         path: 'customers',
-        data: { breadcrumb: 'Clientes' },
+        data: { breadcrumb: 'nav.customers' },
         loadChildren: () =>
           import('./features/customers/customers.routes').then((m) => m.CUSTOMERS_ROUTES),
       },
       {
         path: 'users',
         canMatch: [roleGuard('admin')],
-        data: { breadcrumb: 'Usuários' },
+        data: { breadcrumb: 'nav.users' },
         loadChildren: () => import('./features/users/users.routes').then((m) => m.USERS_ROUTES),
       },
       {
         path: 'forbidden',
-        data: { breadcrumb: 'Acesso negado' },
+        data: { breadcrumb: 'nav.forbidden' },
         loadChildren: () =>
           import('./features/errors/errors.routes').then((m) => m.FORBIDDEN_ROUTES),
       },

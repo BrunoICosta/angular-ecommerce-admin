@@ -4,6 +4,7 @@ import { provideZonelessChangeDetection, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { authInterceptor } from '../auth/auth.interceptor';
+import { provideI18nTesting } from '../i18n/testing/i18n-testing';
 import { AuthService } from '../auth/auth.service';
 import { NotificationService } from '../notifications/notification.service';
 import { errorInterceptor } from './error.interceptor';
@@ -32,6 +33,7 @@ describe('HTTP interceptors', () => {
     TestBed.configureTestingModule({
       providers: [
         provideZonelessChangeDetection(),
+        provideI18nTesting(),
         provideHttpClient(
           withInterceptors([loadingInterceptor, authInterceptor, errorInterceptor]),
         ),

@@ -5,7 +5,7 @@ import { UsersService } from './data-access/users.service';
 export const USERS_ROUTES: Routes = [
   {
     path: '',
-    title: 'Usuários · Loja Admin',
+    title: 'titles.users',
     providers: [UsersService],
     loadComponent: () =>
       import('./pages/user-list-page/user-list-page.component').then(

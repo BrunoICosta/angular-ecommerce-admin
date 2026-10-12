@@ -15,9 +15,9 @@ export interface LoginResponse {
 /** Demo accounts are public on purpose: they are shown on the login page. */
 export const DEMO_PASSWORD = 'demo123';
 
-export const DEMO_ACCOUNTS: readonly { email: string; description: string }[] = [
-  { email: 'admin@loja.com', description: 'Administrador: acesso total' },
-  { email: 'manager@loja.com', description: 'Gerente: sem exclusões nem usuários' },
+export const DEMO_ACCOUNTS: readonly { email: string; descriptionKey: string }[] = [
+  { email: 'admin@loja.com', descriptionKey: 'demoAdmin' },
+  { email: 'manager@loja.com', descriptionKey: 'demoManager' },
 ];
 
 /** Session length of the mocked token (8 hours). */
