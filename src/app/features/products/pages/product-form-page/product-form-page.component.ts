@@ -17,9 +17,17 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Router, RouterLink } from '@angular/router';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Observable, finalize, startWith } from 'rxjs';
 
-import { PRODUCT_CATEGORIES, Product, ProductCategory, ProductDraft } from '@core/models';
+import { LanguageService } from '@core/i18n/language.service';
+import {
+  PRODUCT_CATEGORIES,
+  Product,
+  ProductCategory,
+  ProductDraft,
+  categoryKey,
+} from '@core/models';
 import { HasPendingChanges } from '@core/guards/pending-changes.guard';
 import { NotificationService } from '@core/notifications/notification.service';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -43,6 +51,8 @@ const URL_PATTERN = /^https?:\/\/\S+$/i;
     MatSelectModule,
     MatSlideToggleModule,
     PageHeaderComponent,
+    TranslocoDirective,
+    TranslocoPipe,
     ProductImagePreviewComponent,
   ],
   templateUrl: './product-form-page.component.html',
@@ -53,13 +63,14 @@ export class ProductFormPageComponent implements OnInit, HasPendingChanges {
   private readonly productsApi = inject(ProductsService);
   private readonly notifications = inject(NotificationService);
   private readonly router = inject(Router);
+  private readonly i18n = inject(LanguageService);
 
   /** Resolved by `productResolver` on the edit route; undefined when creating. */
   readonly product = input<Product>();
 
   protected readonly categories = PRODUCT_CATEGORIES;
   protected readonly isEdit = computed(() => this.product() !== undefined);
-  protected readonly title = computed(() => (this.isEdit() ? 'Editar produto' : 'Novo produto'));
+  protected readonly categoryKey = categoryKey;
   protected readonly saving = signal(false);
 
   protected readonly form = inject(NonNullableFormBuilder).group({
@@ -110,7 +121,9 @@ export class ProductFormPageComponent implements OnInit, HasPendingChanges {
     request$.pipe(finalize(() => this.saving.set(false))).subscribe((saved) => {
       this.form.markAsPristine();
       this.notifications.success(
-        current ? 'Produto atualizado.' : `Produto "${saved.name}" criado.`,
+        current
+          ? this.i18n.t('products.form.updated')
+          : this.i18n.t('products.form.created', { name: saved.name }),
       );
       void this.router.navigate(['/products']);
     });

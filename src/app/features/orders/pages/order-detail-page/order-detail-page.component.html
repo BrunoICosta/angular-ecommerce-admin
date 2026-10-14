@@ -1,119 +1,130 @@
 @let order = current();
 
-<app-page-header
-  [title]="'Pedido ' + order.number"
-  [subtitle]="'Realizado em ' + (order.createdAt | date: 'dd/MM/yyyy HH:mm')"
->
-  <app-order-status-chip [status]="order.status" />
-</app-page-header>
+<ng-container *transloco="let t; prefix: 'orders.detail'">
+  <app-page-header
+    [title]="t('title', { number: order.number })"
+    [subtitle]="
+      t('placedAt', {
+        date: order.createdAt | translocoDate: { dateStyle: 'short', timeStyle: 'short' },
+      })
+    "
+  >
+    <app-order-status-chip [status]="order.status" />
+  </app-page-header>
 
-<div class="layout">
-  <div class="main-column">
-    <section class="card section" aria-labelledby="items-title">
-      <h2 id="items-title">Itens ({{ itemsCount() }})</h2>
-      <div class="table-scroll">
-        <table class="items">
-          <thead>
-            <tr>
-              <th scope="col">Produto</th>
-              <th scope="col" class="num">Qtd.</th>
-              <th scope="col" class="num">Preço unit.</th>
-              <th scope="col" class="num">Subtotal</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (item of order.items; track item.productId) {
+  <div class="layout">
+    <div class="main-column">
+      <section class="card section" aria-labelledby="items-title">
+        <h2 id="items-title">{{ t('items', { count: itemsCount() }) }}</h2>
+        <div class="table-scroll">
+          <table class="items">
+            <thead>
               <tr>
-                <td>
-                  <a [routerLink]="['/products', item.productId, 'edit']">{{ item.productName }}</a>
-                </td>
-                <td class="num">{{ item.quantity }}</td>
-                <td class="num">{{ item.unitPrice | currency }}</td>
-                <td class="num">{{ item.unitPrice * item.quantity | currency }}</td>
+                <th scope="col">{{ t('product') }}</th>
+                <th scope="col" class="num">{{ t('quantity') }}</th>
+                <th scope="col" class="num">{{ t('unitPrice') }}</th>
+                <th scope="col" class="num">{{ t('subtotal') }}</th>
               </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-
-      <dl class="totals">
-        <div>
-          <dt>Subtotal</dt>
-          <dd>{{ order.subtotal | currency }}</dd>
-        </div>
-        <div>
-          <dt>Frete</dt>
-          <dd>{{ order.shipping === 0 ? 'Grátis' : (order.shipping | currency) }}</dd>
-        </div>
-        <div class="totals__grand">
-          <dt>Total</dt>
-          <dd>{{ order.total | currency }}</dd>
-        </div>
-      </dl>
-    </section>
-
-    <section class="card section" aria-labelledby="customer-title">
-      <h2 id="customer-title">Cliente e pagamento</h2>
-      <dl class="facts">
-        <div>
-          <dt>Cliente</dt>
-          <dd>
-            <a [routerLink]="['/customers', order.customerId]">{{ order.customerName }}</a>
-          </dd>
-        </div>
-        <div>
-          <dt>Entrega</dt>
-          <dd>{{ order.city }}/{{ order.state }}</dd>
-        </div>
-        <div>
-          <dt>Pagamento</dt>
-          <dd>{{ order.paymentMethod | label: paymentLabels }}</dd>
-        </div>
-      </dl>
-    </section>
-  </div>
-
-  <div class="side-column">
-    <section class="card section" aria-labelledby="status-title">
-      <h2 id="status-title">Alterar status</h2>
-      @if (options().length > 0) {
-        <div class="status-form">
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>Próximo status</mat-label>
-            <mat-select [(ngModel)]="nextStatus" [disabled]="saving()">
-              @for (status of options(); track status) {
-                <mat-option [value]="status">{{ statusLabels[status] }}</mat-option>
+            </thead>
+            <tbody>
+              @for (item of order.items; track item.productId) {
+                <tr>
+                  <td>
+                    <a [routerLink]="['/products', item.productId, 'edit']">{{
+                      item.productName
+                    }}</a>
+                  </td>
+                  <td class="num">{{ item.quantity | translocoDecimal }}</td>
+                  <td class="num">{{ item.unitPrice | translocoCurrency }}</td>
+                  <td class="num">{{ item.unitPrice * item.quantity | translocoCurrency }}</td>
+                </tr>
               }
-            </mat-select>
-          </mat-form-field>
-          <button
-            mat-flat-button
-            type="button"
-            (click)="updateStatus()"
-            [disabled]="saving() || !nextStatus()"
-          >
-            @if (saving()) {
-              <mat-spinner diameter="18" aria-label="Salvando" />
-            } @else {
-              Atualizar status
-            }
-          </button>
+            </tbody>
+          </table>
         </div>
-      } @else {
-        <p class="muted">
-          Este pedido está {{ statusLabels[order.status].toLowerCase() }} e não aceita novas
-          mudanças.
-        </p>
-      }
-    </section>
 
-    <section class="card section" aria-labelledby="timeline-title">
-      <h2 id="timeline-title">Linha do tempo</h2>
-      <app-order-timeline [history]="order.history" [status]="order.status" />
-    </section>
+        <dl class="totals">
+          <div>
+            <dt>{{ t('subtotal') }}</dt>
+            <dd>{{ order.subtotal | translocoCurrency }}</dd>
+          </div>
+          <div>
+            <dt>{{ t('shipping') }}</dt>
+            <dd>
+              {{ order.shipping === 0 ? t('freeShipping') : (order.shipping | translocoCurrency) }}
+            </dd>
+          </div>
+          <div class="totals__grand">
+            <dt>{{ t('total') }}</dt>
+            <dd>{{ order.total | translocoCurrency }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="card section" aria-labelledby="customer-title">
+        <h2 id="customer-title">{{ t('customerPayment') }}</h2>
+        <dl class="facts">
+          <div>
+            <dt>{{ t('customer') }}</dt>
+            <dd>
+              <a [routerLink]="['/customers', order.customerId]">{{ order.customerName }}</a>
+            </dd>
+          </div>
+          <div>
+            <dt>{{ t('delivery') }}</dt>
+            <dd>{{ order.city }}/{{ order.state }}</dd>
+          </div>
+          <div>
+            <dt>{{ t('payment') }}</dt>
+            <dd>{{ 'enums.paymentMethod.' + order.paymentMethod | transloco }}</dd>
+          </div>
+        </dl>
+      </section>
+    </div>
+
+    <div class="side-column">
+      <section class="card section" aria-labelledby="status-title">
+        <h2 id="status-title">{{ t('changeStatus') }}</h2>
+        @if (options().length > 0) {
+          <div class="status-form">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>{{ t('nextStatus') }}</mat-label>
+              <mat-select [(ngModel)]="nextStatus" [disabled]="saving()">
+                @for (status of options(); track status) {
+                  <mat-option [value]="status">{{
+                    'enums.orderStatus.' + status | transloco
+                  }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <button
+              mat-flat-button
+              type="button"
+              (click)="updateStatus()"
+              [disabled]="saving() || !nextStatus()"
+            >
+              @if (saving()) {
+                <mat-spinner diameter="18" [attr.aria-label]="t('saving')" />
+              } @else {
+                {{ t('updateStatus') }}
+              }
+            </button>
+          </div>
+        } @else {
+          <p class="muted">
+            {{ t('finalStatus', { status: 'enums.orderStatus.' + order.status | transloco }) }}
+          </p>
+        }
+      </section>
+
+      <section class="card section" aria-labelledby="timeline-title">
+        <h2 id="timeline-title">{{ t('timeline') }}</h2>
+        <app-order-timeline [history]="order.history" [status]="order.status" />
+      </section>
+    </div>
   </div>
-</div>
 
-<a mat-button routerLink="/orders" class="back-link">
-  <mat-icon>arrow_back</mat-icon> Voltar para pedidos
-</a>
+  <a mat-button routerLink="/orders" class="back-link">
+    <mat-icon>arrow_back</mat-icon> {{ t('back') }}
+  </a>
+</ng-container>

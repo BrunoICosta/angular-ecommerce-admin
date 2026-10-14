@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { provideTranslocoScope } from '@jsverse/transloco';
 
 import { Order } from '@core/models';
 import { provideI18nPaginatorIntl } from '@shared/i18n/paginator-intl';
@@ -9,7 +10,7 @@ import { OrdersService } from './data-access/orders.service';
 export const ORDERS_ROUTES: Routes = [
   {
     path: '',
-    providers: [OrdersService, provideI18nPaginatorIntl()],
+    providers: [OrdersService, provideI18nPaginatorIntl(), provideTranslocoScope('orders')],
     children: [
       {
         path: '',

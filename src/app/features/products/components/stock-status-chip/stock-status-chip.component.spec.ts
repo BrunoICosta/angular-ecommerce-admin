@@ -1,11 +1,15 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { provideI18nTesting } from '@core/i18n/testing/i18n-testing';
+
 import { StockStatusChipComponent } from './stock-status-chip.component';
 
 describe('StockStatusChipComponent', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
+    TestBed.configureTestingModule({
+      providers: [provideZonelessChangeDetection(), provideI18nTesting()],
+    });
   });
 
   for (const [stock, label, tone] of [

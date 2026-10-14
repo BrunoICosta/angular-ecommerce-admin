@@ -1,88 +1,99 @@
 @let c = customer();
 
-<app-page-header [title]="c.name" [subtitle]="'Cliente desde ' + (c.createdAt | date: 'MM/yyyy')" />
+<ng-container *transloco="let t; prefix: 'customers.detail'">
+  <app-page-header
+    [title]="c.name"
+    [subtitle]="
+      t('since', { date: c.createdAt | translocoDate: { month: 'long', year: 'numeric' } })
+    "
+  />
 
-<div class="layout">
-  <section class="card profile" aria-labelledby="profile-title">
-    <h2 id="profile-title" class="visually-hidden">Dados do cliente</h2>
-    <span class="avatar" aria-hidden="true">{{ initials() }}</span>
-    <dl>
-      <div>
-        <dt><mat-icon aria-hidden="true">mail</mat-icon> E-mail</dt>
-        <dd>
-          <a [href]="'mailto:' + c.email">{{ c.email }}</a>
-        </dd>
-      </div>
-      <div>
-        <dt><mat-icon aria-hidden="true">call</mat-icon> Telefone</dt>
-        <dd>{{ c.phone }}</dd>
-      </div>
-      <div>
-        <dt><mat-icon aria-hidden="true">location_on</mat-icon> Cidade</dt>
-        <dd>{{ c.city }}/{{ c.state }}</dd>
-      </div>
-    </dl>
-  </section>
+  <div class="layout">
+    <section class="card profile" aria-labelledby="profile-title">
+      <h2 id="profile-title" class="visually-hidden">{{ t('profile') }}</h2>
+      <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+      <dl>
+        <div>
+          <dt><mat-icon aria-hidden="true">mail</mat-icon> {{ t('email') }}</dt>
+          <dd>
+            <a [href]="'mailto:' + c.email">{{ c.email }}</a>
+          </dd>
+        </div>
+        <div>
+          <dt><mat-icon aria-hidden="true">call</mat-icon> {{ t('phone') }}</dt>
+          <dd>{{ c.phone }}</dd>
+        </div>
+        <div>
+          <dt><mat-icon aria-hidden="true">location_on</mat-icon> {{ t('city') }}</dt>
+          <dd>{{ c.city }}/{{ c.state }}</dd>
+        </div>
+      </dl>
+    </section>
 
-  <div class="stats">
-    <app-stat-tile label="Pedidos" [value]="c.ordersCount.toString()" icon="receipt_long" />
-    <app-stat-tile
-      label="Total gasto"
-      [value]="totalSpent()"
-      icon="payments"
-      hint="Sem pedidos cancelados"
-    />
-    <app-stat-tile label="Ticket médio" [value]="averageTicket()" icon="shopping_cart" />
+    <div class="stats">
+      <app-stat-tile [label]="t('orders')" [value]="ordersCount()" icon="receipt_long" />
+      <app-stat-tile
+        [label]="t('spent')"
+        [value]="totalSpent()"
+        icon="payments"
+        [hint]="t('spentHint')"
+      />
+      <app-stat-tile [label]="t('averageTicket')" [value]="averageTicket()" icon="shopping_cart" />
+    </div>
+
+    <section class="card history" aria-labelledby="history-title">
+      <h2 id="history-title">{{ t('history') }}</h2>
+
+      @if (orders.isLoading()) {
+        <mat-progress-bar mode="indeterminate" [attr.aria-label]="t('loadingOrders')" />
+      } @else if (orders.error()) {
+        <app-error-state icon="cloud_off" [title]="t('ordersError')">
+          <button mat-flat-button type="button" (click)="orders.reload()">
+            {{ 'common.retry' | transloco }}
+          </button>
+        </app-error-state>
+      } @else if (orders.value(); as list) {
+        @if (list.length === 0) {
+          <app-error-state
+            icon="shopping_bag"
+            [title]="t('noOrders')"
+            [message]="t('noOrdersHint')"
+          />
+        } @else {
+          <div class="table-scroll">
+            <table class="orders">
+              <thead>
+                <tr>
+                  <th scope="col">{{ t('colOrder') }}</th>
+                  <th scope="col">{{ t('colDate') }}</th>
+                  <th scope="col" class="num">{{ t('colItems') }}</th>
+                  <th scope="col" class="num">{{ t('colTotal') }}</th>
+                  <th scope="col">{{ t('colStatus') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (order of list; track order.id) {
+                  <tr>
+                    <td>
+                      <a [routerLink]="['/orders', order.id]">{{ order.number }}</a>
+                    </td>
+                    <td class="nowrap">
+                      {{ order.createdAt | translocoDate: { dateStyle: 'short' } }}
+                    </td>
+                    <td class="num">{{ order.items.length }}</td>
+                    <td class="num">{{ order.total | translocoCurrency }}</td>
+                    <td><app-order-status-chip [status]="order.status" /></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    </section>
   </div>
 
-  <section class="card history" aria-labelledby="history-title">
-    <h2 id="history-title">Histórico de pedidos</h2>
-
-    @if (orders.isLoading()) {
-      <mat-progress-bar mode="indeterminate" aria-label="Carregando pedidos" />
-    } @else if (orders.error()) {
-      <app-error-state icon="cloud_off" title="Não foi possível carregar os pedidos">
-        <button mat-flat-button type="button" (click)="orders.reload()">Tentar novamente</button>
-      </app-error-state>
-    } @else if (orders.value(); as list) {
-      @if (list.length === 0) {
-        <app-error-state
-          icon="shopping_bag"
-          title="Nenhum pedido ainda"
-          message="Este cliente ainda não comprou na loja."
-        />
-      } @else {
-        <div class="table-scroll">
-          <table class="orders">
-            <thead>
-              <tr>
-                <th scope="col">Pedido</th>
-                <th scope="col">Data</th>
-                <th scope="col" class="num">Itens</th>
-                <th scope="col" class="num">Total</th>
-                <th scope="col">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (order of list; track order.id) {
-                <tr>
-                  <td>
-                    <a [routerLink]="['/orders', order.id]">{{ order.number }}</a>
-                  </td>
-                  <td class="nowrap">{{ order.createdAt | date: 'dd/MM/yyyy' }}</td>
-                  <td class="num">{{ order.items.length }}</td>
-                  <td class="num">{{ order.total | currency }}</td>
-                  <td><app-order-status-chip [status]="order.status" /></td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
-    }
-  </section>
-</div>
-
-<a mat-button routerLink="/customers" class="back-link">
-  <mat-icon>arrow_back</mat-icon> Voltar para clientes
-</a>
+  <a mat-button routerLink="/customers" class="back-link">
+    <mat-icon>arrow_back</mat-icon> {{ t('back') }}
+  </a>
+</ng-container>

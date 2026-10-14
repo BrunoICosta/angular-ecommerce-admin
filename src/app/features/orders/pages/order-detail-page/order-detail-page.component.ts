@@ -1,4 +1,3 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,20 +14,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import {
+  TranslocoCurrencyPipe,
+  TranslocoDatePipe,
+  TranslocoDecimalPipe,
+} from '@jsverse/transloco-locale';
 import { EMPTY, Observable, finalize, of, switchMap } from 'rxjs';
 
-import {
-  ORDER_STATUS_LABELS,
-  Order,
-  OrderStatus,
-  PAYMENT_METHOD_LABELS,
-  nextStatuses,
-} from '@core/models';
+import { Order, OrderStatus, nextStatuses } from '@core/models';
+import { LanguageService } from '@core/i18n/language.service';
 import { NotificationService } from '@core/notifications/notification.service';
 import { ConfirmService } from '@shared/components/confirm-dialog/confirm.service';
 import { OrderStatusChipComponent } from '@shared/components/order-status-chip/order-status-chip.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
-import { LabelPipe } from '@shared/pipes/label.pipe';
 
 import { OrderTimelineComponent } from '../../components/order-timeline/order-timeline.component';
 import { OrdersService } from '../../data-access/orders.service';
@@ -36,10 +35,12 @@ import { OrdersService } from '../../data-access/orders.service';
 @Component({
   selector: 'app-order-detail-page',
   imports: [
-    CurrencyPipe,
-    DatePipe,
+    TranslocoCurrencyPipe,
+    TranslocoDatePipe,
+    TranslocoDecimalPipe,
+    TranslocoDirective,
+    TranslocoPipe,
     FormsModule,
-    LabelPipe,
     RouterLink,
     MatButtonModule,
     MatFormFieldModule,
@@ -58,14 +59,13 @@ export class OrderDetailPageComponent {
   private readonly ordersApi = inject(OrdersService);
   private readonly confirm = inject(ConfirmService);
   private readonly notifications = inject(NotificationService);
+  private readonly i18n = inject(LanguageService);
 
   /** Resolved by `orderResolver`. */
   readonly order = input.required<Order>();
 
   /** Local copy, replaced by the API response after a status change. */
   protected readonly current = linkedSignal(() => this.order());
-  protected readonly statusLabels = ORDER_STATUS_LABELS;
-  protected readonly paymentLabels = PAYMENT_METHOD_LABELS;
 
   protected readonly options = computed(() => nextStatuses(this.current().status));
   protected readonly nextStatus = linkedSignal<readonly OrderStatus[], OrderStatus | null>({
@@ -85,10 +85,10 @@ export class OrderDetailPageComponent {
     const confirmed$: Observable<boolean> =
       status === 'cancelled'
         ? this.confirm.confirm({
-            title: `Cancelar o pedido ${order.number}?`,
-            message: 'O cliente será notificado e o pedido não poderá ser reaberto.',
-            confirmLabel: 'Cancelar pedido',
-            cancelLabel: 'Voltar',
+            title: this.i18n.t('orders.detail.cancelTitle', { number: order.number }),
+            message: this.i18n.t('orders.detail.cancelMessage'),
+            confirmLabel: this.i18n.t('orders.detail.cancelConfirm'),
+            cancelLabel: this.i18n.t('orders.detail.cancelBack'),
             tone: 'danger',
           })
         : of(true);
@@ -106,7 +106,10 @@ export class OrderDetailPageComponent {
       .subscribe((updated) => {
         this.current.set(updated);
         this.notifications.success(
-          `Pedido ${updated.number}: ${ORDER_STATUS_LABELS[updated.status].toLowerCase()}.`,
+          this.i18n.t('orders.detail.updated', {
+            number: updated.number,
+            status: this.i18n.t(`enums.orderStatus.${updated.status}`).toLowerCase(),
+          }),
         );
       });
   }

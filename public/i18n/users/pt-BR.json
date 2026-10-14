@@ -1,0 +1,21 @@
+{
+  "title": "Usuários",
+  "subtitle": "Equipe com acesso ao painel · {{ count }} ativo(s)",
+  "tableTitle": "Lista de usuários",
+  "loading": "Carregando usuários",
+  "loadError": "Não foi possível carregar os usuários",
+  "colUser": "Usuário",
+  "colRole": "Perfil",
+  "colAccess": "Acesso",
+  "colLastLogin": "Último acesso",
+  "you": "você",
+  "role": "Perfil",
+  "accessOf": "Acesso de {{ name }}",
+  "active": "Ativo",
+  "inactive": "Inativo",
+  "neverLoggedIn": "Nunca acessou",
+  "note": "Gerentes não podem excluir registros nem acessar esta página. Você não pode alterar o próprio perfil.",
+  "roleChanged": "{{ name }} agora é {{ role }}.",
+  "activated": "{{ name }} foi ativado.",
+  "deactivated": "{{ name }} foi desativado."
+}

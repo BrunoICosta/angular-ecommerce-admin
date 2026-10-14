@@ -1,4 +1,3 @@
-import { CurrencyPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,10 +21,13 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoCurrencyPipe, TranslocoDecimalPipe } from '@jsverse/transloco-locale';
 import { filter, finalize, switchMap, tap } from 'rxjs';
 
 import { AuthService } from '@core/auth/auth.service';
-import { PRODUCT_CATEGORIES, Product, STOCK_STATUS_LABELS, StockStatus } from '@core/models';
+import { LanguageService } from '@core/i18n/language.service';
+import { PRODUCT_CATEGORIES, Product, STOCK_STATUSES, categoryKey } from '@core/models';
 import { NotificationService } from '@core/notifications/notification.service';
 import { ConfirmService } from '@shared/components/confirm-dialog/confirm.service';
 import { ErrorStateComponent } from '@shared/components/error-state/error-state.component';
@@ -50,7 +52,10 @@ const DEFAULTS = { page: 1, size: PAGE_SIZE_OPTIONS[0], sort: 'name', dir: 'asc'
 @Component({
   selector: 'app-product-list-page',
   imports: [
-    CurrencyPipe,
+    TranslocoCurrencyPipe,
+    TranslocoDecimalPipe,
+    TranslocoDirective,
+    TranslocoPipe,
     MatCheckboxModule,
     StockStatusChipComponent,
     ReactiveFormsModule,
@@ -77,6 +82,7 @@ export class ProductListPageComponent {
   private readonly navigate = injectQueryNavigator(DEFAULTS);
   private readonly confirm = inject(ConfirmService);
   private readonly notifications = inject(NotificationService);
+  private readonly i18n = inject(LanguageService);
 
   // Query params, bound by withComponentInputBinding(). The URL is the single
   // source of truth for the list state: links, refresh and back button work.
@@ -89,7 +95,8 @@ export class ProductListPageComponent {
   readonly stock = input<string>();
 
   protected readonly categories = PRODUCT_CATEGORIES;
-  protected readonly stockOptions = Object.entries(STOCK_STATUS_LABELS) as [StockStatus, string][];
+  protected readonly stockStatuses = STOCK_STATUSES;
+  protected readonly categoryKey = categoryKey;
   protected readonly pageSizeOptions = PAGE_SIZE_OPTIONS;
   protected readonly isAdmin = inject(AuthService).isAdmin;
   protected readonly columns = computed(() =>
@@ -153,20 +160,31 @@ export class ProductListPageComponent {
   }
 
   protected deleteProduct(product: Product): void {
-    this.confirmAndDelete([product.id], `O produto "${product.name}" será excluído.`);
+    this.confirmAndDelete([product.id], this.i18n.t('products.deleteOne', { name: product.name }));
   }
 
   protected deleteSelected(): void {
     const ids = [...this.selected()];
-    this.confirmAndDelete(ids, `${ids.length} produto(s) selecionado(s) serão excluídos.`);
+    this.confirmAndDelete(
+      ids,
+      ids.length === 1
+        ? this.i18n.t('products.deleteOne', { name: this.nameOf(ids[0]) })
+        : this.i18n.t('products.deleteMany', { count: ids.length }),
+    );
+  }
+
+  private nameOf(id: number): string {
+    return this.result()?.items.find((p) => p.id === id)?.name ?? '';
   }
 
   private confirmAndDelete(ids: number[], message: string): void {
     this.confirm
       .confirm({
-        title: ids.length === 1 ? 'Excluir produto?' : 'Excluir produtos?',
-        message: `${message} Esta ação não pode ser desfeita.`,
-        confirmLabel: 'Excluir',
+        title: this.i18n.t(
+          ids.length === 1 ? 'products.deleteTitleOne' : 'products.deleteTitleMany',
+        ),
+        message: `${message} ${this.i18n.t('products.irreversible')}`,
+        confirmLabel: this.i18n.t('common.delete'),
         tone: 'danger',
         icon: 'delete',
       })
@@ -178,7 +196,9 @@ export class ProductListPageComponent {
       )
       .subscribe(() => {
         this.notifications.success(
-          ids.length === 1 ? 'Produto excluído.' : `${ids.length} produtos excluídos.`,
+          ids.length === 1
+            ? this.i18n.t('products.deletedOne')
+            : this.i18n.t('products.deletedMany', { count: ids.length }),
         );
         this.clearSelection();
         // If the whole page was removed, step back instead of showing an empty page.

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { provideTranslocoScope } from '@jsverse/transloco';
 
 import { pendingChangesGuard } from '@core/guards/pending-changes.guard';
 import { Product } from '@core/models';
@@ -15,7 +16,7 @@ const loadFormPage = () =>
 export const PRODUCTS_ROUTES: Routes = [
   {
     path: '',
-    providers: [ProductsService, provideI18nPaginatorIntl()],
+    providers: [ProductsService, provideI18nPaginatorIntl(), provideTranslocoScope('products')],
     children: [
       {
         path: '',

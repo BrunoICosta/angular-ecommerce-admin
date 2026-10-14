@@ -1,13 +1,15 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { provideI18nTesting } from '@core/i18n/testing/i18n-testing';
+
 import { OrderTimelineComponent } from './order-timeline.component';
 
 describe('OrderTimelineComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [OrderTimelineComponent],
-      providers: [provideZonelessChangeDetection()],
+      providers: [provideZonelessChangeDetection(), provideI18nTesting()],
     });
   });
 
@@ -25,7 +27,7 @@ describe('OrderTimelineComponent', () => {
     const steps = element.querySelectorAll('li');
     expect(steps.length).toBe(4);
     expect(element.querySelector('[aria-current="step"]')?.textContent).toContain('Enviado');
-    expect(steps[1].textContent).toContain('01/09/2026 às 12:30');
+    expect(steps[1].textContent).toContain('01/09/2026, 12:30');
     expect(steps[3].textContent).toContain('Pendente');
   });
 });

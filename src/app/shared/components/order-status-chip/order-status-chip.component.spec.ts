@@ -1,11 +1,15 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { provideI18nTesting } from '@core/i18n/testing/i18n-testing';
+
 import { OrderStatusChipComponent } from './order-status-chip.component';
 
 describe('OrderStatusChipComponent', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
+    TestBed.configureTestingModule({
+      providers: [provideZonelessChangeDetection(), provideI18nTesting()],
+    });
   });
 
   it('renders the status label with a tone class', async () => {

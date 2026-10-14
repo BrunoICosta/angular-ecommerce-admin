@@ -28,7 +28,9 @@ export interface Product {
 
 export type ProductDraft = Omit<Product, 'id' | 'createdAt'>;
 
-export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock';
+export const STOCK_STATUSES = ['in_stock', 'low_stock', 'out_of_stock'] as const;
+
+export type StockStatus = (typeof STOCK_STATUSES)[number];
 
 export function stockStatus(product: Pick<Product, 'stock' | 'minStock'>): StockStatus {
   if (product.stock <= 0) return 'out_of_stock';
@@ -36,8 +38,21 @@ export function stockStatus(product: Pick<Product, 'stock' | 'minStock'>): Stock
   return 'in_stock';
 }
 
-export const STOCK_STATUS_LABELS: Record<StockStatus, string> = {
-  in_stock: 'Em estoque',
-  low_stock: 'Estoque baixo',
-  out_of_stock: 'Esgotado',
+/**
+ * Categories are stored in pt-BR (that is how the API returns them); this maps
+ * each one to its translation key under `enums.category`.
+ */
+const CATEGORY_KEYS: Record<ProductCategory, string> = {
+  Eletrônicos: 'electronics',
+  Informática: 'computers',
+  'Casa e Cozinha': 'home',
+  Moda: 'fashion',
+  Esportes: 'sports',
+  Beleza: 'beauty',
+  Livros: 'books',
+  Brinquedos: 'toys',
 };
+
+export function categoryKey(category: ProductCategory): string {
+  return `enums.category.${CATEGORY_KEYS[category]}`;
+}

@@ -1,5 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, input, linkedSignal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  linkedSignal,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+
+import { LanguageService } from '@core/i18n/language.service';
 
 /** Live preview of the product image URL typed in the form. */
 @Component({
@@ -49,6 +58,8 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductImagePreviewComponent {
+  private readonly i18n = inject(LanguageService);
+
   readonly url = input('');
   readonly alt = input('');
 
@@ -56,6 +67,6 @@ export class ProductImagePreviewComponent {
   protected readonly broken = linkedSignal({ source: this.url, computation: () => false });
 
   protected readonly placeholderLabel = computed(() =>
-    this.url() ? 'Não foi possível carregar a imagem' : 'Informe a URL da imagem',
+    this.i18n.t(this.url() ? 'products.form.previewBroken' : 'products.form.previewEmpty'),
   );
 }

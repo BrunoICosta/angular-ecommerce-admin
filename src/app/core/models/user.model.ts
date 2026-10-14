@@ -1,9 +1,6 @@
 export type Role = 'admin' | 'manager';
 
-export const ROLE_LABELS: Record<Role, string> = {
-  admin: 'Administrador',
-  manager: 'Gerente',
-};
+export const ROLES: readonly Role[] = ['admin', 'manager'];
 
 export interface User {
   id: number;

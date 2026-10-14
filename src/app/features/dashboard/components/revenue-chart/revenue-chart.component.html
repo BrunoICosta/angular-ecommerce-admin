@@ -1,35 +1,39 @@
-<div class="chart" role="img" [attr.aria-label]="summary()">
-  <canvas baseChart type="bar" [data]="data()" [options]="options()"></canvas>
-</div>
+<ng-container *transloco="let t; prefix: 'dashboard.chart'">
+  <div class="chart" role="img" [attr.aria-label]="summary()">
+    <canvas baseChart type="bar" [data]="data()" [options]="options()"></canvas>
+  </div>
 
-<details class="data-table">
-  <summary>Ver dados em tabela</summary>
-  <table>
-    <caption class="visually-hidden">
-      Receita e pedidos por mês
-    </caption>
-    <thead>
-      <tr>
-        <th scope="col">Mês</th>
-        <th scope="col" class="num">Pedidos</th>
-        <th scope="col" class="num">Receita</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (month of months(); track month.month; let i = $index) {
+  <details class="data-table">
+    <summary>{{ t('showTable') }}</summary>
+    <table>
+      <caption class="visually-hidden">
+        {{
+          t('caption')
+        }}
+      </caption>
+      <thead>
         <tr>
-          <th scope="row">{{ labels()[i] }}</th>
-          <td class="num">{{ month.orders }}</td>
-          <td class="num">{{ month.revenue | currency }}</td>
+          <th scope="col">{{ t('month') }}</th>
+          <th scope="col" class="num">{{ t('orders') }}</th>
+          <th scope="col" class="num">{{ t('revenue') }}</th>
         </tr>
-      }
-    </tbody>
-    <tfoot>
-      <tr>
-        <th scope="row">Total</th>
-        <td></td>
-        <td class="num">{{ total() | currency }}</td>
-      </tr>
-    </tfoot>
-  </table>
-</details>
+      </thead>
+      <tbody>
+        @for (month of months(); track month.month; let i = $index) {
+          <tr>
+            <th scope="row">{{ labels()[i] }}</th>
+            <td class="num">{{ month.orders | translocoDecimal }}</td>
+            <td class="num">{{ month.revenue | translocoCurrency }}</td>
+          </tr>
+        }
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row">{{ t('total') }}</th>
+          <td></td>
+          <td class="num">{{ total() | translocoCurrency }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </details>
+</ng-container>

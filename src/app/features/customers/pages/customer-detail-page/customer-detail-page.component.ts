@@ -1,35 +1,33 @@
-import { CurrencyPipe, DatePipe, formatCurrency } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  LOCALE_ID,
-  computed,
-  inject,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { RouterLink } from '@angular/router';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoCurrencyPipe, TranslocoDatePipe } from '@jsverse/transloco-locale';
 
+import { LanguageService } from '@core/i18n/language.service';
 import { CustomerWithStats } from '@core/models';
 import { ErrorStateComponent } from '@shared/components/error-state/error-state.component';
 import { OrderStatusChipComponent } from '@shared/components/order-status-chip/order-status-chip.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { StatTileComponent } from '@shared/components/stat-tile/stat-tile.component';
+import { formatBrl, formatInteger } from '@shared/utils/format.util';
 
 import { CustomersService } from '../../data-access/customers.service';
 
 @Component({
   selector: 'app-customer-detail-page',
   imports: [
-    CurrencyPipe,
-    DatePipe,
     RouterLink,
     MatButtonModule,
     MatIconModule,
     MatProgressBarModule,
+    TranslocoCurrencyPipe,
+    TranslocoDatePipe,
+    TranslocoDirective,
+    TranslocoPipe,
     ErrorStateComponent,
     OrderStatusChipComponent,
     PageHeaderComponent,
@@ -41,7 +39,7 @@ import { CustomersService } from '../../data-access/customers.service';
 })
 export class CustomerDetailPageComponent {
   private readonly customersApi = inject(CustomersService);
-  private readonly locale = inject(LOCALE_ID);
+  private readonly locale = inject(LanguageService).locale;
 
   /** Resolved by `customerResolver`. */
   readonly customer = input.required<CustomerWithStats>();
@@ -59,13 +57,14 @@ export class CustomerDetailPageComponent {
       .join(''),
   );
 
-  protected readonly totalSpent = computed(() => this.brl(this.customer().totalSpent));
+  protected readonly ordersCount = computed(() =>
+    formatInteger(this.customer().ordersCount, this.locale()),
+  );
+  protected readonly totalSpent = computed(() =>
+    formatBrl(this.customer().totalSpent, this.locale()),
+  );
   protected readonly averageTicket = computed(() => {
     const { totalSpent, ordersCount } = this.customer();
-    return this.brl(ordersCount ? totalSpent / ordersCount : 0);
+    return formatBrl(ordersCount ? totalSpent / ordersCount : 0, this.locale());
   });
-
-  private brl(value: number): string {
-    return formatCurrency(value, this.locale, 'R$', 'BRL');
-  }
 }

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { LowStockProduct } from '@core/models';
 import { ErrorStateComponent } from '@shared/components/error-state/error-state.component';
@@ -9,13 +10,20 @@ import { StatusChipComponent } from '@shared/components/status-chip/status-chip.
 
 @Component({
   selector: 'app-low-stock-alert',
-  imports: [MatButtonModule, MatIconModule, RouterLink, ErrorStateComponent, StatusChipComponent],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    RouterLink,
+    TranslocoPipe,
+    ErrorStateComponent,
+    StatusChipComponent,
+  ],
   template: `
     @if (products().length === 0) {
       <app-error-state
         icon="inventory"
-        title="Estoque em dia"
-        message="Nenhum produto ativo abaixo do estoque mínimo."
+        [title]="'dashboard.stockOk' | transloco"
+        [message]="'dashboard.stockOkHint' | transloco"
       />
     } @else {
       <ul>
@@ -23,13 +31,21 @@ import { StatusChipComponent } from '@shared/components/status-chip/status-chip.
           <li>
             <div class="info">
               <a [routerLink]="['/products', product.id, 'edit']">{{ product.name }}</a>
-              <small>{{ product.sku }} · mínimo {{ product.minStock }}</small>
+              <small
+                >{{ product.sku }} ·
+                {{ 'dashboard.minimum' | transloco: { min: product.minStock } }}</small
+              >
             </div>
             @if (product.stock === 0) {
-              <app-status-chip tone="danger" icon="block">Esgotado</app-status-chip>
+              <app-status-chip tone="danger" icon="block">{{
+                'enums.stockStatus.out_of_stock' | transloco
+              }}</app-status-chip>
             } @else {
               <app-status-chip tone="warning" icon="warning">
-                {{ product.stock }} {{ product.stock === 1 ? 'unidade' : 'unidades' }}
+                {{
+                  (product.stock === 1 ? 'common.unit' : 'common.units')
+                    | transloco: { count: product.stock }
+                }}
               </app-status-chip>
             }
           </li>
@@ -37,7 +53,8 @@ import { StatusChipComponent } from '@shared/components/status-chip/status-chip.
       </ul>
       @if (total() > products().length) {
         <a mat-button routerLink="/products" [queryParams]="{ stock: 'low_stock' }">
-          Ver produtos com estoque baixo <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+          {{ 'dashboard.seeLowStock' | transloco }}
+          <mat-icon iconPositionEnd>arrow_forward</mat-icon>
         </a>
       }
     }

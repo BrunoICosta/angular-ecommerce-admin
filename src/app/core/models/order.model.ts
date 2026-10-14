@@ -2,21 +2,9 @@ export const ORDER_STATUSES = ['pending', 'paid', 'shipped', 'delivered', 'cance
 
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
-export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
-  pending: 'Aguardando pagamento',
-  paid: 'Pago',
-  shipped: 'Enviado',
-  delivered: 'Entregue',
-  cancelled: 'Cancelado',
-};
-
 export type PaymentMethod = 'pix' | 'credit_card' | 'boleto';
 
-export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
-  pix: 'Pix',
-  credit_card: 'Cartão de crédito',
-  boleto: 'Boleto',
-};
+// Display labels live in the translation files: `enums.orderStatus.*`, `enums.paymentMethod.*`.
 
 export interface OrderItem {
   productId: number;

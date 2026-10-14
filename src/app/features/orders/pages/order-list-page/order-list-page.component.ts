@@ -1,4 +1,3 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,8 +11,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoCurrencyPipe, TranslocoDatePipe } from '@jsverse/transloco-locale';
 
-import { ORDER_STATUSES, ORDER_STATUS_LABELS, PAYMENT_METHOD_LABELS } from '@core/models';
+import { ORDER_STATUSES } from '@core/models';
 import { ErrorStateComponent } from '@shared/components/error-state/error-state.component';
 import { OrderStatusChipComponent } from '@shared/components/order-status-chip/order-status-chip.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -24,7 +25,6 @@ import {
   toPositiveInt,
 } from '@shared/utils/list-query.util';
 import { injectQueryNavigator, syncedSearchControl } from '@shared/utils/list-page.util';
-import { LabelPipe } from '@shared/pipes/label.pipe';
 import { latestValue } from '@shared/utils/resource.util';
 
 import { OrdersService } from '../../data-access/orders.service';
@@ -36,10 +36,11 @@ const DEFAULTS = { page: 1, size: PAGE_SIZE_OPTIONS[0], sort: 'createdAt', dir: 
 @Component({
   selector: 'app-order-list-page',
   imports: [
-    CurrencyPipe,
-    DatePipe,
+    TranslocoCurrencyPipe,
+    TranslocoDatePipe,
+    TranslocoDirective,
+    TranslocoPipe,
     ReactiveFormsModule,
-    LabelPipe,
     RouterLink,
     ErrorStateComponent,
     OrderStatusChipComponent,
@@ -70,8 +71,6 @@ export class OrderListPageComponent {
   readonly status = input<string>();
 
   protected readonly statuses = ORDER_STATUSES;
-  protected readonly statusLabels = ORDER_STATUS_LABELS;
-  protected readonly paymentLabels = PAYMENT_METHOD_LABELS;
   protected readonly pageSizeOptions = PAGE_SIZE_OPTIONS;
   protected readonly columns = ['number', 'createdAt', 'customer', 'payment', 'total', 'status'];
 

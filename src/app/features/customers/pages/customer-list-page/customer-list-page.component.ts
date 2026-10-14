@@ -1,4 +1,3 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +11,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import {
+  TranslocoCurrencyPipe,
+  TranslocoDatePipe,
+  TranslocoDecimalPipe,
+} from '@jsverse/transloco-locale';
 
 import { BRAZILIAN_STATES } from '@core/models';
 import { ErrorStateComponent } from '@shared/components/error-state/error-state.component';
@@ -34,8 +39,11 @@ const DEFAULTS = { page: 1, size: PAGE_SIZE_OPTIONS[0], sort: 'name', dir: 'asc'
 @Component({
   selector: 'app-customer-list-page',
   imports: [
-    CurrencyPipe,
-    DatePipe,
+    TranslocoCurrencyPipe,
+    TranslocoDatePipe,
+    TranslocoDecimalPipe,
+    TranslocoDirective,
+    TranslocoPipe,
     ReactiveFormsModule,
     RouterLink,
     ErrorStateComponent,

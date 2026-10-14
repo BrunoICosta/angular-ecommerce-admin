@@ -11,11 +11,13 @@
         }}</mat-icon>
       </span>
       <div class="step__body">
-        <span class="step__label">{{ labels[step.status] }}</span>
+        <span class="step__label">{{ 'enums.orderStatus.' + step.status | transloco }}</span>
         @if (step.at) {
-          <time [attr.datetime]="step.at">{{ step.at | date: "dd/MM/yyyy 'às' HH:mm" }}</time>
+          <time [attr.datetime]="step.at">{{
+            step.at | translocoDate: { dateStyle: 'short', timeStyle: 'short' }
+          }}</time>
         } @else {
-          <span class="step__pending">Pendente</span>
+          <span class="step__pending">{{ 'orders.detail.pending' | transloco }}</span>
         }
       </div>
     </li>

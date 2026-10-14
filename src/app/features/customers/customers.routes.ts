@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { provideTranslocoScope } from '@jsverse/transloco';
 
 import { CustomerWithStats } from '@core/models';
 import { provideI18nPaginatorIntl } from '@shared/i18n/paginator-intl';
@@ -9,7 +10,7 @@ import { CustomersService } from './data-access/customers.service';
 export const CUSTOMERS_ROUTES: Routes = [
   {
     path: '',
-    providers: [CustomersService, provideI18nPaginatorIntl()],
+    providers: [CustomersService, provideI18nPaginatorIntl(), provideTranslocoScope('customers')],
     children: [
       {
         path: '',

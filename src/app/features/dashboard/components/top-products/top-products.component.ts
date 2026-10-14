@@ -1,6 +1,7 @@
-import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoCurrencyPipe } from '@jsverse/transloco-locale';
 
 import { TopProduct } from '@core/models';
 import { ErrorStateComponent } from '@shared/components/error-state/error-state.component';
@@ -8,10 +9,10 @@ import { ErrorStateComponent } from '@shared/components/error-state/error-state.
 /** Ranked list with a proportional bar: a single series reads better as a list than as a chart. */
 @Component({
   selector: 'app-top-products',
-  imports: [CurrencyPipe, RouterLink, ErrorStateComponent],
+  imports: [RouterLink, TranslocoCurrencyPipe, TranslocoPipe, ErrorStateComponent],
   template: `
     @if (rows().length === 0) {
-      <app-error-state icon="sell" title="Sem vendas no período" />
+      <app-error-state icon="sell" [title]="'dashboard.noSales' | transloco" />
     } @else {
       <ol>
         @for (row of rows(); track row.productId; let i = $index) {
@@ -20,10 +21,13 @@ import { ErrorStateComponent } from '@shared/components/error-state/error-state.
             <div class="body">
               <div class="line">
                 <a [routerLink]="['/products', row.productId, 'edit']">{{ row.name }}</a>
-                <strong>{{ row.revenue | currency }}</strong>
+                <strong>{{ row.revenue | translocoCurrency }}</strong>
               </div>
               <div class="bar" aria-hidden="true"><span [style.width.%]="row.share"></span></div>
-              <small>{{ row.quantity }} {{ row.quantity === 1 ? 'unidade' : 'unidades' }}</small>
+              <small>{{
+                (row.quantity === 1 ? 'common.unit' : 'common.units')
+                  | transloco: { count: row.quantity }
+              }}</small>
             </div>
           </li>
         }

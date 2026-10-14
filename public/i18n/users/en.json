@@ -1,0 +1,21 @@
+{
+  "title": "Users",
+  "subtitle": "Team with access to the panel · {{ count }} active",
+  "tableTitle": "User list",
+  "loading": "Loading users",
+  "loadError": "Could not load the users",
+  "colUser": "User",
+  "colRole": "Role",
+  "colAccess": "Access",
+  "colLastLogin": "Last sign-in",
+  "you": "you",
+  "role": "Role",
+  "accessOf": "Access for {{ name }}",
+  "active": "Active",
+  "inactive": "Inactive",
+  "neverLoggedIn": "Never signed in",
+  "note": "Managers cannot delete records or open this page. You cannot change your own role.",
+  "roleChanged": "{{ name }} is now {{ role }}.",
+  "activated": "{{ name }} was activated.",
+  "deactivated": "{{ name }} was deactivated."
+}
