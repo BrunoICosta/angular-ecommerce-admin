@@ -15,6 +15,7 @@ import { filter, map } from 'rxjs';
 
 import { AuthService } from '../../auth/auth.service';
 import { LoadingService } from '../../http/loading.service';
+import { LanguageSwitcherComponent } from '../../i18n/language-switcher/language-switcher.component';
 import { ThemeService } from '../../theme/theme.service';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 import { NAV_ITEMS } from '../nav-items';
@@ -34,6 +35,7 @@ function readCollapsed(): boolean {
   imports: [
     TranslocoDirective,
     BreadcrumbComponent,
+    LanguageSwitcherComponent,
     RouterOutlet,
     RouterLink,
     RouterLinkActive,

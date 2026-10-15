@@ -42,7 +42,6 @@
   },
   "language": {
     "label": "Language",
-    "current": "Language: {{ name }}. Change language",
     "pt-BR": "Português (Brasil)",
     "en": "English"
   },

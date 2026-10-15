@@ -64,9 +64,20 @@
 }
 
 .login__panel {
+  position: relative;
   display: grid;
   place-items: center;
-  padding: 24px 16px;
+  padding: 72px 16px 24px;
+
+  @media (min-width: 960px) {
+    padding-top: 24px;
+  }
+}
+
+.login__language {
+  position: absolute;
+  top: 16px;
+  right: 16px;
 }
 
 .mobile-brand {

@@ -12,6 +12,7 @@ import { finalize } from 'rxjs';
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '@core/auth/auth.model';
 import { AuthService } from '@core/auth/auth.service';
 import { httpErrorMessage } from '@core/http/http-error.util';
+import { LanguageSwitcherComponent } from '@core/i18n/language-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-login-page',
@@ -24,6 +25,7 @@ import { httpErrorMessage } from '@core/http/http-error.util';
     MatProgressSpinnerModule,
     TranslocoDirective,
     TranslocoPipe,
+    LanguageSwitcherComponent,
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
