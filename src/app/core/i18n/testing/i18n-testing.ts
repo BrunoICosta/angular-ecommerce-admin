@@ -19,7 +19,7 @@ import usersPt from '../../../../../public/i18n/users/pt-BR.json';
 import { LANGUAGES, LANGUAGE_LOCALES, Language } from '../i18n.model';
 
 /** Scope files, keyed the way TranslocoTestingModule expects (`scope/lang`). */
-const SCOPES: Record<string, Translation> = {
+export const TEST_SCOPES: Record<string, Translation> = {
   'auth/pt-BR': authPt,
   'auth/en': authEn,
   'customers/pt-BR': customersPt,
@@ -42,7 +42,7 @@ export function provideI18nTesting(lang: Language = 'pt-BR'): EnvironmentProvide
   return [
     importProvidersFrom(
       TranslocoTestingModule.forRoot({
-        langs: { 'pt-BR': ptBR, en, ...SCOPES },
+        langs: { 'pt-BR': ptBR, en, ...TEST_SCOPES },
         translocoConfig: {
           availableLangs: [...LANGUAGES],
           defaultLang: lang,
