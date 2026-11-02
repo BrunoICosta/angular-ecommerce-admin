@@ -7,9 +7,9 @@ novo control flow, `rxResource`, guards/interceptors/resolvers funcionais) e **A
 Tem login com JWT simulado e dois perfis de acesso, dashboard com indicadores e gráfico de receita,
 catálogo de produtos com paginação/ordenação/filtros "no servidor", pedidos com linha do tempo e
 mudança de status, clientes com histórico de compras e gestão de usuários. Toda a API é simulada no
-navegador com `angular-in-memory-web-api`, então a demo funciona no GitHub Pages sem backend.
+navegador com `angular-in-memory-web-api`, então a demo funciona como site estático, sem backend.
 
-**Demo:** https://brunoicosta.github.io/angular-ecommerce-admin/
+**Demo:** https://portfolio.brunoisaac.dev/angular-ecommerce-admin/
 
 | Conta              | Senha     | Perfil                                   |
 | ------------------ | --------- | ---------------------------------------- |
@@ -157,7 +157,7 @@ npm start            # http://localhost:4200
 npm run lint         # ESLint (TypeScript + templates, regras de acessibilidade)
 npm run test:ci      # testes unitários no Chrome headless (Karma/Jasmine)
 npm run build        # build de produção em dist/
-npm run build:pages  # build com base-href do GitHub Pages
+npm run build:cf     # build de produção com base-href /angular-ecommerce-admin/
 ```
 
 ## Estrutura de pastas
@@ -189,13 +189,17 @@ src/app/
     └── errors/          acesso negado e página não encontrada
 ```
 
-## CI e deploy
+## CI
 
-- `.github/workflows/ci.yml`: em push/PR na `main`, roda `npm ci`, lint, testes (Chrome headless)
-  e build.
-- `.github/workflows/deploy.yml`: em push na `main` (ou manual), gera o build com o `base-href`
-  do Pages, copia `index.html` para `404.html` (fallback de SPA) e publica com
-  `actions/deploy-pages`.
+`.github/workflows/ci.yml`: em push/PR na `main`, roda `npm ci`, lint, testes (Chrome headless) e
+build.
+
+## Deploy
+
+Publicado na Cloudflare (Workers static assets) em
+https://portfolio.brunoisaac.dev/angular-ecommerce-admin/ pelo pipeline do repositório
+[portfolio](https://github.com/BrunoICosta/portfolio), que roda `npm run build:cf` e serve
+`dist/angular-ecommerce-admin/browser` (o fallback de SPA para rotas profundas fica no Worker).
 
 ## Próximos passos
 

@@ -58,7 +58,7 @@ const customerListOptions: ListOptions<CustomerWithStats> = {
 
 /**
  * Fake REST API backed by angular-in-memory-web-api. It only runs in the
- * browser, which keeps the demo deployable to GitHub Pages. Endpoints that need
+ * browser, which keeps the demo deployable as a static site. Endpoints that need
  * more than plain CRUD (pagination, aggregates, business rules) are handled here;
  * everything else falls through to the library's default behaviour.
  */

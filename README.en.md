@@ -7,10 +7,10 @@ Signals, the new control flow, `rxResource`, functional guards/interceptors/reso
 **Angular Material 3**. It has a mocked JWT login with two roles, a dashboard with KPIs and a revenue
 chart, a product catalog with "server-side" pagination/sorting/filtering, orders with a timeline and
 a status workflow, customers with their purchase history and user management. The whole API is
-simulated in the browser with `angular-in-memory-web-api`, so the demo runs on GitHub Pages with no
-backend. The UI is available in **Brazilian Portuguese and English**.
+simulated in the browser with `angular-in-memory-web-api`, so the demo runs as a static site with
+no backend. The UI is available in **Brazilian Portuguese and English**.
 
-**Live demo:** https://brunoicosta.github.io/angular-ecommerce-admin/
+**Live demo:** https://portfolio.brunoisaac.dev/angular-ecommerce-admin/
 
 | Account            | Password  | Role                                    |
 | ------------------ | --------- | --------------------------------------- |
@@ -56,8 +56,15 @@ npm start            # http://localhost:4200
 npm run lint
 npm run test:ci      # headless Chrome
 npm run build
-npm run build:pages  # build with the GitHub Pages base href
+npm run build:cf     # production build with base href /angular-ecommerce-admin/
 ```
+
+## Deploy
+
+Published on Cloudflare (Workers static assets) at
+https://portfolio.brunoisaac.dev/angular-ecommerce-admin/ by the pipeline of the
+[portfolio](https://github.com/BrunoICosta/portfolio) repository, which runs `npm run build:cf` and
+serves `dist/angular-ecommerce-admin/browser` (the Worker handles the SPA fallback).
 
 See the Portuguese [README](README.md) for the architecture notes and the folder structure.
 

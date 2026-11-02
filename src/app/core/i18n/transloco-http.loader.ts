@@ -15,7 +15,7 @@ export class TranslocoHttpLoader implements TranslocoLoader {
   private readonly http = new HttpClient(inject(HttpXhrBackend));
 
   getTranslation(path: string): Observable<Translation> {
-    // Relative URL, so it works under the GitHub Pages base href.
+    // Relative URL, so it works under the /angular-ecommerce-admin/ base href.
     return this.http.get<Translation>(`i18n/${path}.json`);
   }
 }
