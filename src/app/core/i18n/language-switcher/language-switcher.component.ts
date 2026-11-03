@@ -87,6 +87,11 @@ const ARROW_STEPS: Record<string, number | undefined> = {
       background: var(--mat-sys-surface-container-lowest);
       box-shadow: inset 0 0 0 2px var(--mat-sys-primary);
     }
+    @media (max-width: 419.98px) {
+      .option {
+        width: 40px;
+      }
+    }
     @media (prefers-reduced-motion: reduce) {
       .option {
         transition: none;

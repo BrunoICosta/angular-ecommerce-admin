@@ -128,8 +128,20 @@ form {
 
 .notice {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
+  line-height: 1.5;
+
+  mat-icon {
+    flex-shrink: 0;
+  }
+
+  span {
+    flex: 1;
+    min-width: 0;
+    padding-top: 2px;
+  }
+
   margin: 0 0 16px;
   padding: 12px 14px;
   border-radius: 12px;

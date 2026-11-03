@@ -62,6 +62,7 @@ import { StatusChipComponent } from '@shared/components/status-chip/status-chip.
   styles: `
     ul {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       margin: 0 0 8px;
       padding: 0;
       list-style: none;

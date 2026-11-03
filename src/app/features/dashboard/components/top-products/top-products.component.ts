@@ -37,6 +37,7 @@ import { ErrorStateComponent } from '@shared/components/error-state/error-state.
   styles: `
     ol {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       gap: 14px;
       margin: 0;
       padding: 0;
@@ -59,6 +60,7 @@ import { ErrorStateComponent } from '@shared/components/error-state/error-state.
     }
     .body {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       flex: 1;
       gap: 4px;
       min-width: 0;
@@ -69,6 +71,7 @@ import { ErrorStateComponent } from '@shared/components/error-state/error-state.
       gap: 12px;
     }
     .line a {
+      min-width: 0;
       overflow: hidden;
       color: inherit;
       font-weight: 500;

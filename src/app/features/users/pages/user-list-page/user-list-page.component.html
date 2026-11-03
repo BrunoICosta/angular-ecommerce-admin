@@ -20,10 +20,10 @@
           </button>
         </app-error-state>
       } @else if (users.hasValue()) {
-        <table mat-table [dataSource]="users.value()">
+        <table mat-table class="stack-sm" [dataSource]="users.value()">
           <ng-container matColumnDef="user">
             <th mat-header-cell *matHeaderCellDef>{{ t('colUser') }}</th>
-            <td mat-cell *matCellDef="let user">
+            <td mat-cell *matCellDef="let user" class="cell-primary">
               <div class="person">
                 <span class="name">
                   {{ user.name }}
@@ -70,7 +70,12 @@
 
           <ng-container matColumnDef="lastLoginAt">
             <th mat-header-cell *matHeaderCellDef>{{ t('colLastLogin') }}</th>
-            <td mat-cell *matCellDef="let user" class="nowrap">
+            <td
+              mat-cell
+              *matCellDef="let user"
+              class="nowrap"
+              [attr.data-label]="t('colLastLogin')"
+            >
               {{
                 user.lastLoginAt
                   ? (user.lastLoginAt | translocoDate: { dateStyle: 'short', timeStyle: 'short' })
@@ -94,6 +99,6 @@
 
   <p class="note">
     <mat-icon aria-hidden="true">info</mat-icon>
-    {{ t('note') }}
+    <span>{{ t('note') }}</span>
   </p>
 </ng-container>

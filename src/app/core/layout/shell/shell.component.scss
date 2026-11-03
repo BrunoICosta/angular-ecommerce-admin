@@ -131,6 +131,20 @@
       display: inline;
     }
   }
+
+  // Narrow phones: the avatar alone opens the menu, leaving room for the breadcrumb.
+  @media (max-width: 419.98px) {
+    min-width: 0;
+    padding: 0 4px;
+
+    mat-icon {
+      display: none;
+    }
+
+    .avatar {
+      margin-right: 0;
+    }
+  }
 }
 
 .avatar {

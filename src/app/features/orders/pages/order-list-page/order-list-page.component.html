@@ -58,6 +58,7 @@
       } @else if (result(); as page) {
         <table
           mat-table
+          class="stack-sm"
           [dataSource]="page.items"
           matSort
           [matSortActive]="query().sort"
@@ -83,7 +84,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header="customerName">
               {{ t('colCustomer') }}
             </th>
-            <td mat-cell *matCellDef="let order">
+            <td mat-cell *matCellDef="let order" class="cell-primary">
               <div class="customer-cell">
                 <span>{{ order.customerName }}</span>
                 <small>{{ order.city }}/{{ order.state }}</small>

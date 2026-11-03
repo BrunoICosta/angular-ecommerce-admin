@@ -28,11 +28,13 @@
 
       @if (expired()) {
         <p class="notice notice--info" role="status">
-          <mat-icon>schedule</mat-icon> {{ t('expired') }}
+          <mat-icon aria-hidden="true">schedule</mat-icon> <span>{{ t('expired') }}</span>
         </p>
       }
       @if (errorMessage(); as message) {
-        <p class="notice notice--error" role="alert"><mat-icon>error</mat-icon> {{ message }}</p>
+        <p class="notice notice--error" role="alert">
+          <mat-icon aria-hidden="true">error</mat-icon> <span>{{ message }}</span>
+        </p>
       }
 
       <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
